@@ -1,13 +1,18 @@
 package com.vitek.javalabs.service;
-
+import com.vitek.javalabs.Inform;
 import org.springframework.stereotype.Service;
 
 @Service
 public class InformService {
-    public String informName(String name){
-        return "The name of the movie " + name;
+    public Inform informName(String name) {
+        Inform inform = new Inform();
+        inform.setInform("The name of the movie " + name);
+        return inform;
     }
-    public String informEmpty(){
-        return "Please enter name";
+
+    public Inform informEmpty() {
+        Inform inform = new Inform();
+        inform.setInform("Please enter name");
+        return inform;
     }
 }

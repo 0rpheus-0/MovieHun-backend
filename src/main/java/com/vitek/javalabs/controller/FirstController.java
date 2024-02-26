@@ -1,5 +1,6 @@
 package com.vitek.javalabs.controller;
 
+import com.vitek.javalabs.Inform;
 import com.vitek.javalabs.service.InformService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,13 +14,13 @@ public class FirstController {
         this.informService = informService;
     }
 
-    @GetMapping("/movie/{name}")
-    public String movieName(@PathVariable(name = "name") String name) {
+    @GetMapping(value = "/movie/{name}", produces = "application/json")
+    public Inform movieName(@PathVariable(name = "name") String name) {
         return informService.informName(name);
     }
 
-    @GetMapping("/movie")
-    public String movieEmpty() {
+    @GetMapping(value = "/movie", produces = "application/json")
+    public Inform movieEmpty() {
         return informService.informEmpty();
     }
 }
