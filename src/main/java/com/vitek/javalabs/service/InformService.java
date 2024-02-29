@@ -1,5 +1,8 @@
 package com.vitek.javalabs.service;
 
+import java.util.HashMap;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Service;
@@ -13,12 +16,18 @@ import com.vitek.javalabs.payload.Movie;
 
 @Service
 public class InformService {
+    @Value("${apiKey}")
+    private String apiKey;
+
     public Movie getInfotm(String name) {
-        String url = "https://www.omdbapi.com/?apikey=71559e25&t={name}";
+        String url = "https://www.omdbapi.com/?apikey={apiKey}&t={name}";
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(0, createMappingJacksonHttpMessageConverter());
         ResponseEntity<Movie> responseEntity;
-        responseEntity = restTemplate.getForEntity(url, Movie.class, name);
+        HashMap<String, String> urlParams = new HashMap<>();
+        urlParams.put("name", name);
+        urlParams.put("apiKey", apiKey);
+        responseEntity = restTemplate.getForEntity(url, Movie.class, urlParams);
         Movie responseBody = responseEntity.getBody();
         if (responseBody != null) {
             Movie movie = new Movie();
