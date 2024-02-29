@@ -3,7 +3,7 @@ target/
 mvnw
 mvnw.cmd
 .mvn
-application.propeties
+application.properties
 !**/src/main/**/target/
 !**/src/test/**/target/
 
