@@ -11,39 +11,38 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.vitek.javalabs.model.Movie;
-import com.vitek.javalabs.service.MovieService;
+import com.vitek.javalabs.model.Genre;
+import com.vitek.javalabs.service.GenreService;
 
 @RestController
-@RequestMapping("/movie")
-public class MovieController {
+@RequestMapping("/genre")
+public class GenreController {
 
-    private MovieService movieService;
+    private GenreService genreService;
 
     @Autowired
-    public MovieController(MovieService movieService) {
-        this.movieService = movieService;
+    public GenreController(GenreService genreService) {
+        this.genreService = genreService;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Movie> getMovieById(@PathVariable Long id) {
-        return ResponseEntity.of(movieService.getMovieById(id));
+    public ResponseEntity<Genre> getGenreById(@PathVariable Long id) {
+        return ResponseEntity.of(genreService.getGenreById(id));
     }
 
     @PostMapping
-    public ResponseEntity<Movie> createMovie(@RequestBody Movie movie) {
-        return ResponseEntity.ok(movieService.createMovie(movie));
+    public ResponseEntity<Genre> createGenre(@RequestBody Genre genre) {
+        return ResponseEntity.ok(genreService.createGenre(genre));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Movie> updateMovie(@PathVariable Long id, @RequestBody Movie movieName) {
-        return ResponseEntity.ok(movieService.createMovie(movieName));
+    public ResponseEntity<Genre> updateGenre(@PathVariable Long id, @RequestBody Genre genre) {
+        return ResponseEntity.ok(genreService.createGenre(genre));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMovieById(@PathVariable Long id) {
-        movieService.deleteMovieBuId(id);
+    public ResponseEntity<Void> deleteGenreById(@PathVariable Long id) {
+        genreService.deleteGenreBuId(id);
         return ResponseEntity.ok().build();
     }
-
 }

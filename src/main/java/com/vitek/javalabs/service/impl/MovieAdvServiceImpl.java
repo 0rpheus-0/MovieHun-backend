@@ -1,4 +1,4 @@
-package com.vitek.javalabs.service;
+package com.vitek.javalabs.service.impl;
 
 import java.util.HashMap;
 
@@ -12,39 +12,40 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.vitek.javalabs.payload.Movie;
+import com.vitek.javalabs.payload.MovieAdv;
+import com.vitek.javalabs.service.MovieAdvService;
 
 @Service
-public class InformService {
+public class MovieAdvServiceImpl implements MovieAdvService {
     @Value("${apiKey}")
     private String apiKey;
 
-    public Movie getInfotm(String name) {
+    public MovieAdv getInfotm(String name) {
         String url = "https://www.omdbapi.com/?apikey={apiKey}&t={name}";
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(0, createMappingJacksonHttpMessageConverter());
-        ResponseEntity<Movie> responseEntity;
+        ResponseEntity<MovieAdv> responseEntity;
         HashMap<String, String> urlParams = new HashMap<>();
         urlParams.put("name", name);
         urlParams.put("apiKey", apiKey);
-        responseEntity = restTemplate.getForEntity(url, Movie.class, urlParams);
-        Movie responseBody = responseEntity.getBody();
+        responseEntity = restTemplate.getForEntity(url, MovieAdv.class, urlParams);
+        MovieAdv responseBody = responseEntity.getBody();
         if (responseBody != null) {
-            Movie movie = new Movie();
-            movie.setTitle(responseBody.getTitle());
-            movie.setYear(responseBody.getYear());
-            movie.setReleased(responseBody.getReleased());
-            movie.setRuntime(responseBody.getRuntime());
-            movie.setGenre(responseBody.getGenre());
-            movie.setDirector(responseBody.getDirector());
-            movie.setWriter(responseBody.getWriter());
-            movie.setActors(responseBody.getActors());
-            movie.setPlot(responseBody.getPlot());
-            movie.setLanguage(responseBody.getLanguage());
-            movie.setCountry(responseBody.getCountry());
-            movie.setImdbRating(responseBody.getImdbRating());
-            movie.setType(responseBody.getType());
-            return movie;
+            MovieAdv movieAdv = new MovieAdv();
+            movieAdv.setTitle(responseBody.getTitle());
+            movieAdv.setYear(responseBody.getYear());
+            movieAdv.setReleased(responseBody.getReleased());
+            movieAdv.setRuntime(responseBody.getRuntime());
+            movieAdv.setGenre(responseBody.getGenre());
+            movieAdv.setDirector(responseBody.getDirector());
+            movieAdv.setWriter(responseBody.getWriter());
+            movieAdv.setActors(responseBody.getActors());
+            movieAdv.setPlot(responseBody.getPlot());
+            movieAdv.setLanguage(responseBody.getLanguage());
+            movieAdv.setCountry(responseBody.getCountry());
+            movieAdv.setImdbRating(responseBody.getImdbRating());
+            movieAdv.setType(responseBody.getType());
+            return movieAdv;
         } else {
             return null;
         }

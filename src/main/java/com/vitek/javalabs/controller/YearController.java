@@ -11,39 +11,38 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.vitek.javalabs.model.Movie;
-import com.vitek.javalabs.service.MovieService;
+import com.vitek.javalabs.model.Year;
+import com.vitek.javalabs.service.YearService;
 
 @RestController
-@RequestMapping("/movie")
-public class MovieController {
+@RequestMapping("/year")
+public class YearController {
 
-    private MovieService movieService;
+    private YearService yearService;
 
     @Autowired
-    public MovieController(MovieService movieService) {
-        this.movieService = movieService;
+    public YearController(YearService yearService) {
+        this.yearService = yearService;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Movie> getMovieById(@PathVariable Long id) {
-        return ResponseEntity.of(movieService.getMovieById(id));
+    public ResponseEntity<Year> getYearById(@PathVariable Long id) {
+        return ResponseEntity.of(yearService.getYearById(id));
     }
 
     @PostMapping
-    public ResponseEntity<Movie> createMovie(@RequestBody Movie movie) {
-        return ResponseEntity.ok(movieService.createMovie(movie));
+    public ResponseEntity<Year> createYear(@RequestBody Year year) {
+        return ResponseEntity.ok(yearService.createYear(year));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Movie> updateMovie(@PathVariable Long id, @RequestBody Movie movieName) {
-        return ResponseEntity.ok(movieService.createMovie(movieName));
+    public ResponseEntity<Year> updateGenre(@PathVariable Long id, @RequestBody Year year) {
+        return ResponseEntity.ok(yearService.createYear(year));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMovieById(@PathVariable Long id) {
-        movieService.deleteMovieBuId(id);
+    public ResponseEntity<Void> deleteYearById(@PathVariable Long id) {
+        yearService.deleteYearBuId(id);
         return ResponseEntity.ok().build();
     }
-
 }

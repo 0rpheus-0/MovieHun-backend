@@ -3,7 +3,7 @@ package com.vitek.javalabs.payload;
 import lombok.Data;
 
 @Data
-public class Movie {
+public class MovieAdv {
     private String title;
     private String year;
     private String released;
