@@ -1,5 +1,7 @@
 package com.vitek.javalabs.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,6 +25,11 @@ public class MovieController {
     @Autowired
     public MovieController(MovieService movieService) {
         this.movieService = movieService;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Movie>> getAllMovies() {
+        return ResponseEntity.ok(movieService.getAllMovies());
     }
 
     @GetMapping("/{id}")

@@ -1,5 +1,6 @@
 package com.vitek.javalabs.service.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -19,6 +20,10 @@ public class GenreServiceImpl implements GenreService {
     public GenreServiceImpl(GenreRepository genreRepository, EntityManager entityManager) {
         this.genreRepository = genreRepository;
         this.entityManager = entityManager;
+    }
+
+    public List<Genre> getAllGenres() {
+        return genreRepository.findAll();
     }
 
     public Optional<Genre> getGenreById(Long id) {

@@ -24,7 +24,7 @@ public class Movie {
     private String actors;
     private String language;
 
-    @ManyToOne
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     private Year year;
 
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })

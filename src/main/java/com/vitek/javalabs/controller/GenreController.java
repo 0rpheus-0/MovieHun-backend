@@ -1,5 +1,7 @@
 package com.vitek.javalabs.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,6 +25,11 @@ public class GenreController {
     @Autowired
     public GenreController(GenreService genreService) {
         this.genreService = genreService;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Genre>> getAllGenres() {
+        return ResponseEntity.ok(genreService.getAllGenres());
     }
 
     @GetMapping("/{id}")

@@ -1,5 +1,7 @@
 package com.vitek.javalabs.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,6 +25,11 @@ public class YearController {
     @Autowired
     public YearController(YearService yearService) {
         this.yearService = yearService;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Year>> getAllYears() {
+        return ResponseEntity.ok(yearService.getAllYears());
     }
 
     @GetMapping("/{id}")

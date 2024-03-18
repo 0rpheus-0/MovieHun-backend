@@ -1,6 +1,7 @@
 package com.vitek.javalabs.service.impl;
 
 import java.util.Optional;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,10 @@ public class MovieServiceImpl implements MovieService {
     public MovieServiceImpl(MovieRepository movieRepository, EntityManager entityManager) {
         this.movieRepository = movieRepository;
         this.entityManager = entityManager;
+    }
+
+    public List<Movie> getAllMovies() {
+        return movieRepository.findAll();
     }
 
     public Optional<Movie> getMovieById(Long id) {

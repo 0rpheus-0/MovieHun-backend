@@ -1,10 +1,13 @@
 package com.vitek.javalabs.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.vitek.javalabs.model.Genre;
 
 public interface GenreService {
+
+    public List<Genre> getAllGenres();
 
     public Optional<Genre> getGenreById(Long id);
 

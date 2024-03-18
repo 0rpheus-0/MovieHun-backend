@@ -1,5 +1,6 @@
 package com.vitek.javalabs.service.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -19,6 +20,10 @@ public class YearServiceImpl implements YearService {
     public YearServiceImpl(YearRepository yearRepository, EntityManager entityManager) {
         this.yearRepository = yearRepository;
         this.entityManager = entityManager;
+    }
+
+    public List<Year> getAllYears() {
+        return yearRepository.findAll();
     }
 
     public Optional<Year> getYearById(Long id) {
