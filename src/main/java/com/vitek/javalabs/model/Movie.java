@@ -1,6 +1,5 @@
 package com.vitek.javalabs.model;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.persistence.CascadeType;
@@ -30,18 +29,6 @@ public class Movie {
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinTable(name = "movies_genres", joinColumns = { @JoinColumn(name = "movie_id") }, inverseJoinColumns = {
             @JoinColumn(name = "genre_id") })
-    private Set<Genre> genres = new HashSet<>();
+    private Set<Genre> genres;
 
-    public void addGenre(Genre genre) {
-        genres.add(genre);
-        genre.getMovies().add(this);
-    }
-
-    public void removeGenre(Long genreId) {
-        Genre genre = this.genres.stream().filter(t -> t.getId().equals(genreId)).findFirst().orElse(null);
-        if (genre != null) {
-            this.genres.remove(genre);
-            genre.getMovies().remove(this);
-        }
-    }
 }
