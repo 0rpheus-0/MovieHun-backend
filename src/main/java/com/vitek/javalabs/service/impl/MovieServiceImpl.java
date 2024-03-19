@@ -42,6 +42,12 @@ public class MovieServiceImpl implements MovieService {
 
     public Movie updateMovie(Long id, Movie movie) {
         movie.setId(id);
+        movie.setYear(years.findByYearRel(movie.getYear().getYearRel()).orElse(movie.getYear()));
+        movie.setGenres(
+                movie.getGenres()
+                        .stream()
+                        .map(x -> ganres.findByName(x.getName()).orElse(x))
+                        .collect(Collectors.toSet()));
         return movies.save(movie);
     }
 
