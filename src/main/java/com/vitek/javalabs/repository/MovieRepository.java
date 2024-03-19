@@ -7,5 +7,4 @@ import com.vitek.javalabs.model.Movie;
 
 @Repository
 public interface MovieRepository extends JpaRepository<Movie, Long> {
-
 }

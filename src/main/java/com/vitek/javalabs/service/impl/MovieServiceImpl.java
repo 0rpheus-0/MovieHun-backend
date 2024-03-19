@@ -1,49 +1,44 @@
 package com.vitek.javalabs.service.impl;
 
-import java.util.Optional;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import com.vitek.javalabs.model.Movie;
 import com.vitek.javalabs.repository.MovieRepository;
+import com.vitek.javalabs.repository.YearRepository;
 import com.vitek.javalabs.service.MovieService;
 
-import jakarta.persistence.EntityManager;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 @Service
 public class MovieServiceImpl implements MovieService {
 
-    private MovieRepository movieRepository;
-    private EntityManager entityManager;
-
-    public MovieServiceImpl(MovieRepository movieRepository, EntityManager entityManager) {
-        this.movieRepository = movieRepository;
-        this.entityManager = entityManager;
-    }
+    private MovieRepository movies;
+    private YearRepository years;
 
     public List<Movie> getAllMovies() {
-        return movieRepository.findAll();
+        return movies.findAll();
     }
 
     public Optional<Movie> getMovieById(Long id) {
-        return movieRepository.findById(id);
+        return movies.findById(id);
     }
 
     public Movie createMovie(Movie movie) {
-        return movieRepository.save(movie);
+        movie.setYear(years.findByYearRel(movie.getYear().getYearRel()).orElse(movie.getYear()));
+        return movies.save(movie);
     }
 
     public Movie updateMovie(Long id, Movie movie) {
         movie.setId(id);
-        movieRepository.saveAndFlush(movie);
-        Movie managerMovie = entityManager.find(Movie.class, movie.getId());
-        entityManager.refresh(managerMovie);
-        return managerMovie;
+        return movies.save(movie);
     }
 
     public Void deleteMovieBuId(Long id) {
-        movieRepository.deleteById(id);
+        movies.deleteById(id);
         return null;
     }
 
