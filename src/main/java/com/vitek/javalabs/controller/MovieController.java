@@ -33,6 +33,11 @@ public class MovieController {
         return ResponseEntity.ok(movieService.getAllMovies());
     }
 
+    @GetMapping("/genre/{id}")
+    public ResponseEntity<List<Movie>> getMoviesByGenre(@PathVariable Long id) {
+        return ResponseEntity.ok(movieService.getMoviesByGenre(id));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Movie> getMovieById(@PathVariable Long id) {
         return ResponseEntity.of(movieService.getMovieById(id));

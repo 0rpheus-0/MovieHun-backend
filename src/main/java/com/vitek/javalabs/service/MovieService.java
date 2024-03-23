@@ -11,6 +11,8 @@ public interface MovieService {
 
     public Optional<Movie> getMovieById(Long id);
 
+    public List<Movie> getMoviesByGenre(Long id);
+
     public Movie createMovie(Movie movie);
 
     public Movie createMovieByName(String name);
