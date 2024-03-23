@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.vitek.javalabs.cache.EntityCache;
 import com.vitek.javalabs.model.Genre;
 import com.vitek.javalabs.model.Movie;
 import com.vitek.javalabs.model.Year;
@@ -28,13 +29,20 @@ public class MovieServiceImpl implements MovieService {
     private YearRepository years;
     private GenreRepository ganres;
     private MovieAdvService movieAdvService;
+    private EntityCache<Movie> movieCache;
 
     public List<Movie> getAllMovies() {
         return movies.findAll();
     }
 
     public Optional<Movie> getMovieById(Long id) {
-        return movies.findById(id);
+        Optional<Movie> movie = movieCache.get(id);
+        if (!movie.isPresent()) {
+            movie = movies.findById(id);
+            if (movie.isPresent())
+                movieCache.put(id, movie.get());
+        }
+        return movie;
     }
 
     public List<Movie> getMoviesByGenre(Long id) {
@@ -52,6 +60,7 @@ public class MovieServiceImpl implements MovieService {
                         .stream()
                         .map(x -> ganres.findByName(x.getName()).orElse(x))
                         .collect(Collectors.toSet()));
+        movieCache.put(movie.getId(), movie);
         return movies.save(movie);
     }
 
@@ -91,10 +100,13 @@ public class MovieServiceImpl implements MovieService {
                         .stream()
                         .map(x -> ganres.findByName(x.getName()).orElse(x))
                         .collect(Collectors.toSet()));
+        ;
+        movieCache.put(movie.getId(), movie);
         return movies.save(movie);
     }
 
     public Void deleteMovieBuId(Long id) {
+        movieCache.remove(id);
         movies.deleteById(id);
         return null;
     }
