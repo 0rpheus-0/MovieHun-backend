@@ -41,6 +41,10 @@ public class MovieServiceImpl implements MovieService {
         return movies.findMoviesByGenre(id);
     }
 
+    public List<Movie> getMoviesByYear(Long id) {
+        return movies.findMoviesByYear(id);
+    }
+
     public Movie createMovie(Movie movie) {
         movie.setYear(years.findByYearRel(movie.getYear().getYearRel()).orElse(movie.getYear()));
         movie.setGenres(
