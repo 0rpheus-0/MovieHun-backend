@@ -38,10 +38,10 @@ public class MovieController {
         return ResponseEntity.ok(movieService.getMoviesByGenre(id));
     }
 
-    @GetMapping("/year/{id}")
-    public ResponseEntity<List<Movie>> getMoviesByYear(@PathVariable Long id) {
-        return ResponseEntity.ok(movieService.getMoviesByYear(id));
-    }
+    // @GetMapping("/year/{id}")
+    // public ResponseEntity<List<Movie>> getMoviesByYear(@PathVariable Long id) {
+    // return ResponseEntity.ok(movieService.getMoviesByYear(id));
+    // }
 
     @GetMapping("/{id}")
     public ResponseEntity<Movie> getMovieById(@PathVariable Long id) {

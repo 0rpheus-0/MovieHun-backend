@@ -49,9 +49,9 @@ public class MovieServiceImpl implements MovieService {
         return movies.findMoviesByGenre(id);
     }
 
-    public List<Movie> getMoviesByYear(Long id) {
-        return movies.findMoviesByYear(id);
-    }
+    // public List<Movie> getMoviesByYear(Long id) {
+    // return movies.findMoviesByYear(id);
+    // }
 
     public Movie createMovie(Movie movie) {
         movie.setYear(years.findByYearRel(movie.getYear().getYearRel()).orElse(movie.getYear()));
@@ -100,8 +100,7 @@ public class MovieServiceImpl implements MovieService {
                         .stream()
                         .map(x -> ganres.findByName(x.getName()).orElse(x))
                         .collect(Collectors.toSet()));
-        ;
-        movieCache.put(movie.getId(), movie);
+        movieCache.put(id, movie);
         return movies.save(movie);
     }
 

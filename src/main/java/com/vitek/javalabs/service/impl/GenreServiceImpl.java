@@ -5,45 +5,48 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.vitek.javalabs.cache.EntityCache;
 import com.vitek.javalabs.model.Genre;
 import com.vitek.javalabs.repository.GenreRepository;
 import com.vitek.javalabs.service.GenreService;
 
-import jakarta.persistence.EntityManager;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 @Service
 public class GenreServiceImpl implements GenreService {
 
-    private GenreRepository genreRepository;
-    private EntityManager entityManager;
-
-    public GenreServiceImpl(GenreRepository genreRepository, EntityManager entityManager) {
-        this.genreRepository = genreRepository;
-        this.entityManager = entityManager;
-    }
+    private GenreRepository genres;
+    private EntityCache<Genre> genreCache;
 
     public List<Genre> getAllGenres() {
-        return genreRepository.findAll();
+        return genres.findAll();
     }
 
     public Optional<Genre> getGenreById(Long id) {
-        return genreRepository.findById(id);
+        Optional<Genre> genre = genreCache.get(id);
+        if (!genre.isPresent()) {
+            genre = genres.findById(id);
+            if (genre.isPresent())
+                genreCache.put(id, genre.get());
+        }
+        return genre;
     }
 
     public Genre createGenre(Genre genre) {
-        return genreRepository.save(genre);
+        genreCache.put(genre.getId(), genre);
+        return genres.save(genre);
     }
 
     public Genre updateGenre(Long id, Genre genre) {
         genre.setId(id);
-        genreRepository.saveAndFlush(genre);
-        Genre managerGenre = entityManager.find(Genre.class, genre.getId());
-        entityManager.refresh(managerGenre);
-        return managerGenre;
+        genreCache.put(id, genre);
+        return genres.save(genre);
     }
 
     public Void deleteGenreBuId(Long id) {
-        genreRepository.deleteById(id);
+        genreCache.remove(id);
+        genres.deleteById(id);
         return null;
     }
 }
