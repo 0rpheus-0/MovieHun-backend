@@ -5,45 +5,48 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.vitek.javalabs.cache.EntityCache;
 import com.vitek.javalabs.model.Year;
 import com.vitek.javalabs.repository.YearRepository;
 import com.vitek.javalabs.service.YearService;
 
-import jakarta.persistence.EntityManager;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 @Service
 public class YearServiceImpl implements YearService {
 
-    private YearRepository yearRepository;
-    private EntityManager entityManager;
-
-    public YearServiceImpl(YearRepository yearRepository, EntityManager entityManager) {
-        this.yearRepository = yearRepository;
-        this.entityManager = entityManager;
-    }
+    private YearRepository years;
+    private EntityCache<Year> yearCache;
 
     public List<Year> getAllYears() {
-        return yearRepository.findAll();
+        return years.findAll();
     }
 
     public Optional<Year> getYearById(Long id) {
-        return yearRepository.findById(id);
+        Optional<Year> year = yearCache.get(id);
+        if (!year.isPresent()) {
+            year = years.findById(id);
+            if (year.isPresent())
+                yearCache.put(id, year.get());
+        }
+        return year;
     }
 
     public Year createYear(Year year) {
-        return yearRepository.save(year);
+        yearCache.put(year.getId(), year);
+        return years.save(year);
     }
 
     public Year updateYear(Long id, Year year) {
         year.setId(id);
-        yearRepository.saveAndFlush(year);
-        Year managerYear = entityManager.find(Year.class, year.getId());
-        entityManager.refresh(managerYear);
-        return managerYear;
+        yearCache.put(id, year);
+        return years.save(year);
     }
 
     public Void deleteYearBuId(Long id) {
-        yearRepository.deleteById(id);
+        yearCache.remove(id);
+        years.deleteById(id);
         return null;
     }
 }
