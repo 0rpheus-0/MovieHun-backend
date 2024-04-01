@@ -17,5 +17,6 @@ public class MovieAdv {
     private String country;
     private Float imdbRating;
     private String type;
+    private String poster;
 
 }

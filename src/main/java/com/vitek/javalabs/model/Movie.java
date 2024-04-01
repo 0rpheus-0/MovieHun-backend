@@ -22,6 +22,7 @@ public class Movie {
     private String director;
     private String actors;
     private String language;
+    private String poster;
 
     @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     private Year year;

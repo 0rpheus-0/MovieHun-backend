@@ -45,6 +45,7 @@ public class MovieAdvServiceImpl implements MovieAdvService {
             movieAdv.setCountry(responseBody.getCountry());
             movieAdv.setImdbRating(responseBody.getImdbRating());
             movieAdv.setType(responseBody.getType());
+            movieAdv.setPoster(responseBody.getPoster());
             return movieAdv;
         } else {
             return null;
