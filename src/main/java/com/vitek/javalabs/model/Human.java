@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @Entity
-public class Actor {
+public class Human {
     @Id
     @GeneratedValue
     private Long id;

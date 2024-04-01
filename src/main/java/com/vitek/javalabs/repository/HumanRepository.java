@@ -5,9 +5,9 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.vitek.javalabs.model.Actor;
+import com.vitek.javalabs.model.Human;
 
 @Repository
-public interface ActorRepository extends JpaRepository<Actor, Long> {
-    Optional<Actor> findByName(String name);
+public interface HumanRepository extends JpaRepository<Human, Long> {
+    Optional<Human> findByName(String name);
 }

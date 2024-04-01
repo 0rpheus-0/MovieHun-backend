@@ -43,6 +43,11 @@ public class MovieController {
         return ResponseEntity.ok(movieService.getMoviesByActor(id));
     }
 
+    @GetMapping("/director/{id}")
+    public ResponseEntity<List<Movie>> getMoviesByDirector(@PathVariable Long id) {
+        return ResponseEntity.ok(movieService.getMoviesByDirector(id));
+    }
+
     @GetMapping("/year/{id}")
     public ResponseEntity<List<Movie>> getMoviesByYear(@PathVariable Long id) {
         return ResponseEntity.ok(movieService.getMoviesByYear(id));

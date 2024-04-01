@@ -9,13 +9,13 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.vitek.javalabs.cache.EntityCache;
-import com.vitek.javalabs.model.Actor;
 import com.vitek.javalabs.model.Genre;
+import com.vitek.javalabs.model.Human;
 import com.vitek.javalabs.model.Movie;
 import com.vitek.javalabs.model.Year;
 import com.vitek.javalabs.payload.MovieAdv;
-import com.vitek.javalabs.repository.ActorRepository;
 import com.vitek.javalabs.repository.GenreRepository;
+import com.vitek.javalabs.repository.HumanRepository;
 import com.vitek.javalabs.repository.MovieRepository;
 import com.vitek.javalabs.repository.YearRepository;
 import com.vitek.javalabs.service.MovieAdvService;
@@ -30,7 +30,8 @@ public class MovieServiceImpl implements MovieService {
     private MovieRepository movies;
     private YearRepository years;
     private GenreRepository ganres;
-    private ActorRepository actors;
+    private HumanRepository actors;
+    private HumanRepository directors;
     private MovieAdvService movieAdvService;
     private EntityCache<Movie> movieCache;
 
@@ -56,6 +57,10 @@ public class MovieServiceImpl implements MovieService {
         return movies.findMoviesByActor(id);
     }
 
+    public List<Movie> getMoviesByDirector(Long id) {
+        return movies.findMoviesByDirector(id);
+    }
+
     public List<Movie> getMoviesByYear(Long id) {
         return movies.findMoviesByYear(id);
     }
@@ -72,6 +77,11 @@ public class MovieServiceImpl implements MovieService {
                         .stream()
                         .map(x -> actors.findByName(x.getName()).orElse(x))
                         .collect(Collectors.toSet()));
+        movie.setDirectors(
+                movie.getDirectors()
+                        .stream()
+                        .map(x -> directors.findByName(x.getName()).orElse(x))
+                        .collect(Collectors.toSet()));
         movieCache.put(movie.getId(), movie);
         return movies.save(movie);
     }
@@ -80,7 +90,6 @@ public class MovieServiceImpl implements MovieService {
         Movie movie = new Movie();
         MovieAdv movieAdv = movieAdvService.getInfotm(name);
         movie.setTitle(movieAdv.getTitle());
-        movie.setDirector(movieAdv.getDirector());
         movie.setLanguage(movieAdv.getLanguage());
         movie.setPoster(movieAdv.getPoster());
 
@@ -100,15 +109,26 @@ public class MovieServiceImpl implements MovieService {
         movie.setGenres(setGenre);
 
         String actorStr = movieAdv.getActors();
-        Set<Actor> setActor = new HashSet<>();
+        Set<Human> setActor = new HashSet<>();
 
         String[] wordsA = actorStr.split(", ");
         for (String wordA : wordsA) {
-            Actor actor = new Actor();
+            Human actor = new Human();
             actor.setName(wordA.trim());
             setActor.add(actor);
         }
         movie.setActors(setActor);
+
+        String directorStr = movieAdv.getDirector();
+        Set<Human> setDirector = new HashSet<>();
+
+        String[] wordsD = directorStr.split(", ");
+        for (String wordD : wordsD) {
+            Human director = new Human();
+            director.setName(wordD.trim());
+            setDirector.add(director);
+        }
+        movie.setDirectors(setDirector);
 
         createMovie(movie);
 
@@ -127,6 +147,11 @@ public class MovieServiceImpl implements MovieService {
                 movie.getActors()
                         .stream()
                         .map(x -> actors.findByName(x.getName()).orElse(x))
+                        .collect(Collectors.toSet()));
+        movie.setDirectors(
+                movie.getDirectors()
+                        .stream()
+                        .map(x -> directors.findByName(x.getName()).orElse(x))
                         .collect(Collectors.toSet()));
         movieCache.put(id, movie);
         return movies.save(movie);

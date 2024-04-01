@@ -15,6 +15,8 @@ public interface MovieService {
 
     public List<Movie> getMoviesByActor(Long id);
 
+    public List<Movie> getMoviesByDirector(Long id);
+
     public List<Movie> getMoviesByYear(Long id);
 
     public Movie createMovie(Movie movie);

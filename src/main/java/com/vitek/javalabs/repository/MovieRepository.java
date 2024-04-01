@@ -17,6 +17,9 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
     @Query("SELECT m FROM Movie m JOIN m.actors a WHERE a.id = :actor")
     List<Movie> findMoviesByActor(@Param("actor") Long actorId);
 
+    @Query("SELECT m FROM Movie m JOIN m.directors d WHERE d.id = :director")
+    List<Movie> findMoviesByDirector(@Param("director") Long actorId);
+
     @Query("SELECT m FROM Movie m WHERE m.year.id = :year")
     List<Movie> findMoviesByYear(@Param("year") Long yearId);
 }

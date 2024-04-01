@@ -19,7 +19,6 @@ public class Movie {
     @GeneratedValue
     private Long id;
     private String title;
-    private String director;
     private String language;
     private String poster;
 
@@ -34,6 +33,11 @@ public class Movie {
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinTable(name = "movies_actors", joinColumns = { @JoinColumn(name = "movie_id") }, inverseJoinColumns = {
             @JoinColumn(name = "actor_id") })
-    private Set<Actor> actors;
+    private Set<Human> actors;
+
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @JoinTable(name = "movies_directors", joinColumns = { @JoinColumn(name = "movie_id") }, inverseJoinColumns = {
+            @JoinColumn(name = "director_id") })
+    private Set<Human> directors;
 
 }
