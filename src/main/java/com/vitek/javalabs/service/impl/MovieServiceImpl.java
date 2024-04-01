@@ -52,6 +52,10 @@ public class MovieServiceImpl implements MovieService {
         return movies.findMoviesByGenre(id);
     }
 
+    public List<Movie> getMoviesByActor(Long id) {
+        return movies.findMoviesByActor(id);
+    }
+
     public List<Movie> getMoviesByYear(Long id) {
         return movies.findMoviesByYear(id);
     }
