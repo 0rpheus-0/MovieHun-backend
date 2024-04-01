@@ -92,6 +92,8 @@ public class MovieServiceImpl implements MovieService {
         movie.setTitle(movieAdv.getTitle());
         movie.setLanguage(movieAdv.getLanguage());
         movie.setPoster(movieAdv.getPoster());
+        movie.setRuntime(movieAdv.getRuntime());
+        movie.setPlot(movieAdv.getPlot());
 
         Year year = new Year();
         year.setYearRel(movieAdv.getYear());
