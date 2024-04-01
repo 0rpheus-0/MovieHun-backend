@@ -20,7 +20,6 @@ public class Movie {
     private Long id;
     private String title;
     private String director;
-    private String actors;
     private String language;
     private String poster;
 
@@ -31,5 +30,10 @@ public class Movie {
     @JoinTable(name = "movies_genres", joinColumns = { @JoinColumn(name = "movie_id") }, inverseJoinColumns = {
             @JoinColumn(name = "genre_id") })
     private Set<Genre> genres;
+
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @JoinTable(name = "movies_actors", joinColumns = { @JoinColumn(name = "movie_id") }, inverseJoinColumns = {
+            @JoinColumn(name = "actor_id") })
+    private Set<Actor> actors;
 
 }

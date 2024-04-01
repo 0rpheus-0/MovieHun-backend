@@ -9,10 +9,12 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.vitek.javalabs.cache.EntityCache;
+import com.vitek.javalabs.model.Actor;
 import com.vitek.javalabs.model.Genre;
 import com.vitek.javalabs.model.Movie;
 import com.vitek.javalabs.model.Year;
 import com.vitek.javalabs.payload.MovieAdv;
+import com.vitek.javalabs.repository.ActorRepository;
 import com.vitek.javalabs.repository.GenreRepository;
 import com.vitek.javalabs.repository.MovieRepository;
 import com.vitek.javalabs.repository.YearRepository;
@@ -28,6 +30,7 @@ public class MovieServiceImpl implements MovieService {
     private MovieRepository movies;
     private YearRepository years;
     private GenreRepository ganres;
+    private ActorRepository actors;
     private MovieAdvService movieAdvService;
     private EntityCache<Movie> movieCache;
 
@@ -60,6 +63,11 @@ public class MovieServiceImpl implements MovieService {
                         .stream()
                         .map(x -> ganres.findByName(x.getName()).orElse(x))
                         .collect(Collectors.toSet()));
+        movie.setActors(
+                movie.getActors()
+                        .stream()
+                        .map(x -> actors.findByName(x.getName()).orElse(x))
+                        .collect(Collectors.toSet()));
         movieCache.put(movie.getId(), movie);
         return movies.save(movie);
     }
@@ -69,7 +77,6 @@ public class MovieServiceImpl implements MovieService {
         MovieAdv movieAdv = movieAdvService.getInfotm(name);
         movie.setTitle(movieAdv.getTitle());
         movie.setDirector(movieAdv.getDirector());
-        movie.setActors(movieAdv.getActors());
         movie.setLanguage(movieAdv.getLanguage());
         movie.setPoster(movieAdv.getPoster());
 
@@ -80,13 +87,24 @@ public class MovieServiceImpl implements MovieService {
         String genreStr = movieAdv.getGenre();
         Set<Genre> setGenre = new HashSet<>();
 
-        String[] words = genreStr.split("[,\\s]+");
-        for (String word : words) {
+        String[] wordsG = genreStr.split("[,\\s]+");
+        for (String wordG : wordsG) {
             Genre genre = new Genre();
-            genre.setName(word.trim());
+            genre.setName(wordG.trim());
             setGenre.add(genre);
         }
         movie.setGenres(setGenre);
+
+        String actorStr = movieAdv.getActors();
+        Set<Actor> setActor = new HashSet<>();
+
+        String[] wordsA = actorStr.split("[,\\s]+");
+        for (String wordA : wordsA) {
+            Actor actor = new Actor();
+            actor.setName(wordA.trim());
+            setActor.add(actor);
+        }
+        movie.setActors(setActor);
 
         createMovie(movie);
 
@@ -100,6 +118,11 @@ public class MovieServiceImpl implements MovieService {
                 movie.getGenres()
                         .stream()
                         .map(x -> ganres.findByName(x.getName()).orElse(x))
+                        .collect(Collectors.toSet()));
+        movie.setActors(
+                movie.getActors()
+                        .stream()
+                        .map(x -> actors.findByName(x.getName()).orElse(x))
                         .collect(Collectors.toSet()));
         movieCache.put(id, movie);
         return movies.save(movie);
