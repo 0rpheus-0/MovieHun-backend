@@ -8,12 +8,14 @@ import org.springframework.stereotype.Service;
 import com.vitek.javalabs.cache.EntityCache;
 import com.vitek.javalabs.model.Actor;
 import com.vitek.javalabs.repository.ActorRepository;
+import com.vitek.javalabs.service.ActorService;
 
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 @Service
-public class ActorServiceImpl {
+public class ActorServiceImpl implements ActorService {
+
     private ActorRepository actors;
     private EntityCache<Actor> actorCache;
 

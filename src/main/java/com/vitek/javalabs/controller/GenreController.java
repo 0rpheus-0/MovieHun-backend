@@ -44,7 +44,7 @@ public class GenreController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Genre> updateGenre(@PathVariable Long id, @RequestBody Genre genre) {
-        return ResponseEntity.ok(genreService.createGenre(genre));
+        return ResponseEntity.ok(genreService.updateGenre(id, genre));
     }
 
     @DeleteMapping("/{id}")

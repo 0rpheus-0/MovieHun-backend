@@ -87,7 +87,7 @@ public class MovieServiceImpl implements MovieService {
         String genreStr = movieAdv.getGenre();
         Set<Genre> setGenre = new HashSet<>();
 
-        String[] wordsG = genreStr.split("[,\\s]+");
+        String[] wordsG = genreStr.split(", ");
         for (String wordG : wordsG) {
             Genre genre = new Genre();
             genre.setName(wordG.trim());
@@ -98,7 +98,7 @@ public class MovieServiceImpl implements MovieService {
         String actorStr = movieAdv.getActors();
         Set<Actor> setActor = new HashSet<>();
 
-        String[] wordsA = actorStr.split("[,\\s]+");
+        String[] wordsA = actorStr.split(", ");
         for (String wordA : wordsA) {
             Actor actor = new Actor();
             actor.setName(wordA.trim());

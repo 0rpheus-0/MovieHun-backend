@@ -44,7 +44,7 @@ public class YearController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Year> updateGenre(@PathVariable Long id, @RequestBody Year year) {
-        return ResponseEntity.ok(yearService.createYear(year));
+        return ResponseEntity.ok(yearService.updateYear(id, year));
     }
 
     @DeleteMapping("/{id}")
