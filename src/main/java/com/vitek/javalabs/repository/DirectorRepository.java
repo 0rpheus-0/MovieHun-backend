@@ -5,9 +5,9 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.vitek.javalabs.model.Human;
+import com.vitek.javalabs.model.Director;
 
 @Repository
-public interface HumanRepository extends JpaRepository<Human, Long> {
-    Optional<Human> findByName(String name);
+public interface DirectorRepository extends JpaRepository<Director, Long> {
+    Optional<Director> findByName(String name);
 }

@@ -13,43 +13,43 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.vitek.javalabs.model.Human;
-import com.vitek.javalabs.service.HumanService;
+import com.vitek.javalabs.model.Director;
+import com.vitek.javalabs.service.DirectorService;
 
 @RestController
 @RequestMapping("/director")
 public class DirectorController {
 
-    private HumanService directorService;
+    private DirectorService directorService;
 
     @Autowired
-    public DirectorController(HumanService directorService) {
+    public DirectorController(DirectorService directorService) {
         this.directorService = directorService;
     }
 
     @GetMapping
-    public ResponseEntity<List<Human>> getAllDirectors() {
-        return ResponseEntity.ok(directorService.getAllHumans());
+    public ResponseEntity<List<Director>> getAllDirectors() {
+        return ResponseEntity.ok(directorService.getAllDirectors());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Human> getDirectorById(@PathVariable Long id) {
-        return ResponseEntity.of(directorService.getHumanById(id));
+    public ResponseEntity<Director> getDirectorById(@PathVariable Long id) {
+        return ResponseEntity.of(directorService.getDirectorById(id));
     }
 
     @PostMapping
-    public ResponseEntity<Human> createDirector(@RequestBody Human director) {
-        return ResponseEntity.ok(directorService.createHuman(director));
+    public ResponseEntity<Director> createDirector(@RequestBody Director director) {
+        return ResponseEntity.ok(directorService.createDirector(director));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Human> updateDirector(@PathVariable Long id, @RequestBody Human director) {
-        return ResponseEntity.ok(directorService.updateHuman(id, director));
+    public ResponseEntity<Director> updateDirector(@PathVariable Long id, @RequestBody Director director) {
+        return ResponseEntity.ok(directorService.updateDirector(id, director));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteDirectorById(@PathVariable Long id) {
-        directorService.deleteHumanBuId(id);
+        directorService.deleteDirectorBuId(id);
         return ResponseEntity.ok().build();
     }
 }

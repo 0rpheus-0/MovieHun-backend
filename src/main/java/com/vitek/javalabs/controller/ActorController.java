@@ -13,43 +13,43 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.vitek.javalabs.model.Human;
-import com.vitek.javalabs.service.HumanService;
+import com.vitek.javalabs.model.Actor;
+import com.vitek.javalabs.service.ActorService;
 
 @RestController
 @RequestMapping("/actor")
 public class ActorController {
 
-    private HumanService actorService;
+    private ActorService actorService;
 
     @Autowired
-    public ActorController(HumanService actorService) {
+    public ActorController(ActorService actorService) {
         this.actorService = actorService;
     }
 
     @GetMapping
-    public ResponseEntity<List<Human>> getAllActors() {
-        return ResponseEntity.ok(actorService.getAllHumans());
+    public ResponseEntity<List<Actor>> getAllActors() {
+        return ResponseEntity.ok(actorService.getAllActors());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Human> getActorById(@PathVariable Long id) {
-        return ResponseEntity.of(actorService.getHumanById(id));
+    public ResponseEntity<Actor> getActorById(@PathVariable Long id) {
+        return ResponseEntity.of(actorService.getActorById(id));
     }
 
     @PostMapping
-    public ResponseEntity<Human> createActor(@RequestBody Human actor) {
-        return ResponseEntity.ok(actorService.createHuman(actor));
+    public ResponseEntity<Actor> createActor(@RequestBody Actor actor) {
+        return ResponseEntity.ok(actorService.createActor(actor));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Human> updateActor(@PathVariable Long id, @RequestBody Human actor) {
-        return ResponseEntity.ok(actorService.updateHuman(id, actor));
+    public ResponseEntity<Actor> updateActor(@PathVariable Long id, @RequestBody Actor actor) {
+        return ResponseEntity.ok(actorService.updateActor(id, actor));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteActorById(@PathVariable Long id) {
-        actorService.deleteHumanBuId(id);
+        actorService.deleteActorBuId(id);
         return ResponseEntity.ok().build();
     }
 }

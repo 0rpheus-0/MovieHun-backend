@@ -9,13 +9,15 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.vitek.javalabs.cache.EntityCache;
+import com.vitek.javalabs.model.Actor;
+import com.vitek.javalabs.model.Director;
 import com.vitek.javalabs.model.Genre;
-import com.vitek.javalabs.model.Human;
 import com.vitek.javalabs.model.Movie;
 import com.vitek.javalabs.model.Year;
 import com.vitek.javalabs.payload.MovieAdv;
+import com.vitek.javalabs.repository.ActorRepository;
+import com.vitek.javalabs.repository.DirectorRepository;
 import com.vitek.javalabs.repository.GenreRepository;
-import com.vitek.javalabs.repository.HumanRepository;
 import com.vitek.javalabs.repository.MovieRepository;
 import com.vitek.javalabs.repository.YearRepository;
 import com.vitek.javalabs.service.MovieAdvService;
@@ -30,8 +32,8 @@ public class MovieServiceImpl implements MovieService {
     private MovieRepository movies;
     private YearRepository years;
     private GenreRepository ganres;
-    private HumanRepository actors;
-    private HumanRepository directors;
+    private ActorRepository actors;
+    private DirectorRepository directors;
     private MovieAdvService movieAdvService;
     private EntityCache<Movie> movieCache;
 
@@ -111,22 +113,22 @@ public class MovieServiceImpl implements MovieService {
         movie.setGenres(setGenre);
 
         String actorStr = movieAdv.getActors();
-        Set<Human> setActor = new HashSet<>();
+        Set<Actor> setActor = new HashSet<>();
 
         String[] wordsA = actorStr.split(", ");
         for (String wordA : wordsA) {
-            Human actor = new Human();
+            Actor actor = new Actor();
             actor.setName(wordA.trim());
             setActor.add(actor);
         }
         movie.setActors(setActor);
 
         String directorStr = movieAdv.getDirector();
-        Set<Human> setDirector = new HashSet<>();
+        Set<Director> setDirector = new HashSet<>();
 
         String[] wordsD = directorStr.split(", ");
         for (String wordD : wordsD) {
-            Human director = new Human();
+            Director director = new Director();
             director.setName(wordD.trim());
             setDirector.add(director);
         }
