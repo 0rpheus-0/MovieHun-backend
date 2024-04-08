@@ -18,7 +18,7 @@ public class Exceptions {
     @ExceptionHandler(RuntimeException.class)
     public Error handleInternalServerError(RuntimeException ex) {
         log.error("Unexpected exception", ex);
-        return new Error("Oops...");
+        return new Error("Something went wrong");
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
