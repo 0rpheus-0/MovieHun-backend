@@ -23,7 +23,7 @@ public class Exceptions {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public Error handleTypeMismatchException(MethodArgumentTypeMismatchException ex) {
+    public Error handleypeMismatchException(MethodArgumentTypeMismatchException ex) {
         log.error("Type mismatch", ex);
         return new Error(String.format("Invalid format of parameter: %s",
                 ex.getName()));
