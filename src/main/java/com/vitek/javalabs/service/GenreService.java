@@ -3,17 +3,17 @@ package com.vitek.javalabs.service;
 import java.util.List;
 import java.util.Optional;
 
-import com.vitek.javalabs.model.Genre;
+import com.vitek.javalabs.dto.GenreDto;
 
 public interface GenreService {
 
-    public List<Genre> getAllGenres();
+    public List<GenreDto> getAllGenres();
 
-    public Optional<Genre> getGenreById(Long id);
+    public Optional<GenreDto> getGenreById(Long id);
 
-    public Genre createGenre(Genre genre);
+    public GenreDto createGenre(GenreDto genre);
 
-    public Genre updateGenre(Long id, Genre genre);
+    public GenreDto updateGenre(Long id, GenreDto genre);
 
     public Void deleteGenreBuId(Long id);
 }

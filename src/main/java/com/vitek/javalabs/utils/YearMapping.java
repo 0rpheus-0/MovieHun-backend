@@ -3,6 +3,9 @@ package com.vitek.javalabs.utils;
 import com.vitek.javalabs.dto.YearDto;
 import com.vitek.javalabs.model.Year;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 public class YearMapping {
     public YearDto toDto(Year entity) {
         YearDto dto = new YearDto();

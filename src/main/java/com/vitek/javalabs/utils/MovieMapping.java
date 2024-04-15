@@ -3,6 +3,9 @@ package com.vitek.javalabs.utils;
 import com.vitek.javalabs.dto.MovieDto;
 import com.vitek.javalabs.model.Movie;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 public class MovieMapping {
     public MovieDto toDto(Movie entity) {
         MovieDto dto = new MovieDto();

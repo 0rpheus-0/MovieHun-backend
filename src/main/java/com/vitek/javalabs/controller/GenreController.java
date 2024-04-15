@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.vitek.javalabs.model.Genre;
+import com.vitek.javalabs.dto.GenreDto;
 import com.vitek.javalabs.service.GenreService;
 
 @RestController
@@ -28,22 +28,22 @@ public class GenreController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Genre>> getAllGenres() {
+    public ResponseEntity<List<GenreDto>> getAllGenres() {
         return ResponseEntity.ok(genreService.getAllGenres());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Genre> getGenreById(@PathVariable Long id) {
+    public ResponseEntity<GenreDto> getGenreById(@PathVariable Long id) {
         return ResponseEntity.of(genreService.getGenreById(id));
     }
 
     @PostMapping
-    public ResponseEntity<Genre> createGenre(@RequestBody Genre genre) {
+    public ResponseEntity<GenreDto> createGenre(@RequestBody GenreDto genre) {
         return ResponseEntity.ok(genreService.createGenre(genre));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Genre> updateGenre(@PathVariable Long id, @RequestBody Genre genre) {
+    public ResponseEntity<GenreDto> updateGenre(@PathVariable Long id, @RequestBody GenreDto genre) {
         return ResponseEntity.ok(genreService.updateGenre(id, genre));
     }
 

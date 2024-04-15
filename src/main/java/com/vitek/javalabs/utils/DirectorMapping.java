@@ -3,6 +3,9 @@ package com.vitek.javalabs.utils;
 import com.vitek.javalabs.dto.DirectorDto;
 import com.vitek.javalabs.model.Director;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 public class DirectorMapping {
     public DirectorDto toDto(Director entity) {
         DirectorDto dto = new DirectorDto();

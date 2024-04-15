@@ -3,6 +3,9 @@ package com.vitek.javalabs.utils;
 import com.vitek.javalabs.dto.ActorDto;
 import com.vitek.javalabs.model.Actor;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 public class ActorMapping {
     public ActorDto toDto(Actor entity) {
         ActorDto dto = new ActorDto();
