@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.vitek.javalabs.cache.EntityCache;
+import com.vitek.javalabs.dto.MovieDto;
 import com.vitek.javalabs.model.Actor;
 import com.vitek.javalabs.model.Director;
 import com.vitek.javalabs.model.Genre;
@@ -22,6 +23,7 @@ import com.vitek.javalabs.repository.MovieRepository;
 import com.vitek.javalabs.repository.YearRepository;
 import com.vitek.javalabs.service.MovieAdvService;
 import com.vitek.javalabs.service.MovieService;
+import com.vitek.javalabs.utils.MovieMapping;
 
 import lombok.AllArgsConstructor;
 
@@ -35,57 +37,63 @@ public class MovieServiceImpl implements MovieService {
     private ActorRepository actors;
     private DirectorRepository directors;
     private MovieAdvService movieAdvService;
-    private EntityCache<Movie> movieCache;
+    private EntityCache<MovieDto> movieCache;
+    private MovieMapping movieMapping;
 
-    public List<Movie> getAllMovies() {
-        return movies.findAll();
+    public List<MovieDto> getAllMovies() {
+        return movies.findAll().stream().map(x -> movieMapping.toDto(x)).toList();
     }
 
-    public Optional<Movie> getMovieById(Long id) {
-        Optional<Movie> movie = movieCache.get(id);
+    public Optional<MovieDto> getMovieById(Long id) {
+        Optional<MovieDto> movie = movieCache.get(id);
         if (!movie.isPresent()) {
-            movie = movies.findById(id);
-            if (movie.isPresent())
+            Optional<Movie> movieEntity = movies.findById(id);
+            if (movieEntity.isPresent()) {
+                movie = Optional.of(movieMapping.toDto(movieEntity.get()));
                 movieCache.put(id, movie.get());
+            }
         }
         return movie;
     }
 
-    public List<Movie> getMoviesByGenre(Long id) {
-        return movies.findMoviesByGenre(id);
+    public List<MovieDto> getMoviesByGenre(Long id) {
+        return movies.findMoviesByGenre(id).stream().map(x -> movieMapping.toDto(x)).toList();
     }
 
-    public List<Movie> getMoviesByActor(Long id) {
-        return movies.findMoviesByActor(id);
+    public List<MovieDto> getMoviesByActor(Long id) {
+        return movies.findMoviesByActor(id).stream().map(x -> movieMapping.toDto(x)).toList();
     }
 
-    public List<Movie> getMoviesByDirector(Long id) {
-        return movies.findMoviesByDirector(id);
+    public List<MovieDto> getMoviesByDirector(Long id) {
+        return movies.findMoviesByDirector(id).stream().map(x -> movieMapping.toDto(x)).toList();
     }
 
-    public List<Movie> getMoviesByYear(Long id) {
-        return movies.findMoviesByYear(id);
+    public List<MovieDto> getMoviesByYear(Long id) {
+        return movies.findMoviesByYear(id).stream().map(x -> movieMapping.toDto(x)).toList();
     }
 
-    public Movie createMovie(Movie movie) {
-        movie.setYear(years.findByYearRel(movie.getYear().getYearRel()).orElse(movie.getYear()));
-        movie.setGenres(
-                movie.getGenres()
+    public MovieDto createMovie(MovieDto movie) {
+        Movie movieEntity = movieMapping.toEntity(movie);
+        movieEntity.setYear(years.findByYearRel(movieEntity.getYear().getYearRel()).orElse(movieEntity.getYear()));
+        movieEntity.setGenres(
+                movieEntity.getGenres()
                         .stream()
                         .map(x -> ganres.findByName(x.getName()).orElse(x))
                         .collect(Collectors.toSet()));
-        movie.setActors(
-                movie.getActors()
+        movieEntity.setActors(
+                movieEntity.getActors()
                         .stream()
                         .map(x -> actors.findByName(x.getName()).orElse(x))
                         .collect(Collectors.toSet()));
-        movie.setDirectors(
-                movie.getDirectors()
+        movieEntity.setDirectors(
+                movieEntity.getDirectors()
                         .stream()
                         .map(x -> directors.findByName(x.getName()).orElse(x))
                         .collect(Collectors.toSet()));
+        movies.save(movieEntity);
+        movie = movieMapping.toDto(movieEntity);
         movieCache.put(movie.getId(), movie);
-        return movies.save(movie);
+        return movie;
     }
 
     public Movie createMovieByName(String name) {
@@ -134,31 +142,34 @@ public class MovieServiceImpl implements MovieService {
         }
         movie.setDirectors(setDirector);
 
-        createMovie(movie);
+        createMovie(movieMapping.toDto(movie));
 
-        return movie;
+        return movie;// пофиксить
     }
 
-    public Movie updateMovie(Long id, Movie movie) {
-        movie.setId(id);
-        movie.setYear(years.findByYearRel(movie.getYear().getYearRel()).orElse(movie.getYear()));
-        movie.setGenres(
-                movie.getGenres()
+    public MovieDto updateMovie(Long id, MovieDto movie) {
+        Movie movieEntity = movieMapping.toEntity(movie);
+        movieEntity.setId(id);
+        movieEntity.setYear(years.findByYearRel(movieEntity.getYear().getYearRel()).orElse(movieEntity.getYear()));
+        movieEntity.setGenres(
+                movieEntity.getGenres()
                         .stream()
                         .map(x -> ganres.findByName(x.getName()).orElse(x))
                         .collect(Collectors.toSet()));
-        movie.setActors(
-                movie.getActors()
+        movieEntity.setActors(
+                movieEntity.getActors()
                         .stream()
                         .map(x -> actors.findByName(x.getName()).orElse(x))
                         .collect(Collectors.toSet()));
-        movie.setDirectors(
-                movie.getDirectors()
+        movieEntity.setDirectors(
+                movieEntity.getDirectors()
                         .stream()
                         .map(x -> directors.findByName(x.getName()).orElse(x))
                         .collect(Collectors.toSet()));
-        movieCache.put(id, movie);
-        return movies.save(movie);
+        movies.save(movieEntity);
+        movie = movieMapping.toDto(movieEntity);
+        movieCache.put(movie.getId(), movie);
+        return movie;
     }
 
     public Void deleteMovieBuId(Long id) {

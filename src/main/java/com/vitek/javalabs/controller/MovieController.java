@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.vitek.javalabs.dto.MovieDto;
 import com.vitek.javalabs.model.Movie;
 import com.vitek.javalabs.service.MovieService;
 
@@ -29,37 +30,37 @@ public class MovieController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Movie>> getAllMovies() {
+    public ResponseEntity<List<MovieDto>> getAllMovies() {
         return ResponseEntity.ok(movieService.getAllMovies());
     }
 
     @GetMapping("/genre/{id}")
-    public ResponseEntity<List<Movie>> getMoviesByGenre(@PathVariable Long id) {
+    public ResponseEntity<List<MovieDto>> getMoviesByGenre(@PathVariable Long id) {
         return ResponseEntity.ok(movieService.getMoviesByGenre(id));
     }
 
     @GetMapping("/actor/{id}")
-    public ResponseEntity<List<Movie>> getMoviesByActor(@PathVariable Long id) {
+    public ResponseEntity<List<MovieDto>> getMoviesByActor(@PathVariable Long id) {
         return ResponseEntity.ok(movieService.getMoviesByActor(id));
     }
 
     @GetMapping("/director/{id}")
-    public ResponseEntity<List<Movie>> getMoviesByDirector(@PathVariable Long id) {
+    public ResponseEntity<List<MovieDto>> getMoviesByDirector(@PathVariable Long id) {
         return ResponseEntity.ok(movieService.getMoviesByDirector(id));
     }
 
     @GetMapping("/year/{id}")
-    public ResponseEntity<List<Movie>> getMoviesByYear(@PathVariable Long id) {
+    public ResponseEntity<List<MovieDto>> getMoviesByYear(@PathVariable Long id) {
         return ResponseEntity.ok(movieService.getMoviesByYear(id));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Movie> getMovieById(@PathVariable Long id) {
+    public ResponseEntity<MovieDto> getMovieById(@PathVariable Long id) {
         return ResponseEntity.of(movieService.getMovieById(id));
     }
 
     @PostMapping
-    public ResponseEntity<Movie> createMovie(@RequestBody Movie movie) {
+    public ResponseEntity<MovieDto> createMovie(@RequestBody MovieDto movie) {
         return ResponseEntity.ok(movieService.createMovie(movie));
     }
 
@@ -69,7 +70,7 @@ public class MovieController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Movie> updateMovie(@PathVariable Long id, @RequestBody Movie movie) {
+    public ResponseEntity<MovieDto> updateMovie(@PathVariable Long id, @RequestBody MovieDto movie) {
         return ResponseEntity.ok(movieService.updateMovie(id, movie));
     }
 

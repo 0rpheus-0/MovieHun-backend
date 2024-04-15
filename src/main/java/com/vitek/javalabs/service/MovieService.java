@@ -3,27 +3,28 @@ package com.vitek.javalabs.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.vitek.javalabs.dto.MovieDto;
 import com.vitek.javalabs.model.Movie;
 
 public interface MovieService {
 
-    public List<Movie> getAllMovies();
+    public List<MovieDto> getAllMovies();
 
-    public Optional<Movie> getMovieById(Long id);
+    public Optional<MovieDto> getMovieById(Long id);
 
-    public List<Movie> getMoviesByGenre(Long id);
+    public List<MovieDto> getMoviesByGenre(Long id);
 
-    public List<Movie> getMoviesByActor(Long id);
+    public List<MovieDto> getMoviesByActor(Long id);
 
-    public List<Movie> getMoviesByDirector(Long id);
+    public List<MovieDto> getMoviesByDirector(Long id);
 
-    public List<Movie> getMoviesByYear(Long id);
+    public List<MovieDto> getMoviesByYear(Long id);
 
-    public Movie createMovie(Movie movie);
+    public MovieDto createMovie(MovieDto movie);
 
     public Movie createMovieByName(String name);
 
-    public Movie updateMovie(Long id, Movie movie);
+    public MovieDto updateMovie(Long id, MovieDto movie);
 
     public Void deleteMovieBuId(Long id);
 }

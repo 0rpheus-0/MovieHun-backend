@@ -1,11 +1,14 @@
 package com.vitek.javalabs.utils;
 
+import org.springframework.stereotype.Service;
+
 import com.vitek.javalabs.dto.MovieDto;
 import com.vitek.javalabs.model.Movie;
 
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
+@Service
 public class MovieMapping {
     public MovieDto toDto(Movie entity) {
         MovieDto dto = new MovieDto();

@@ -1,11 +1,14 @@
 package com.vitek.javalabs.utils;
 
+import org.springframework.stereotype.Service;
+
 import com.vitek.javalabs.dto.YearDto;
 import com.vitek.javalabs.model.Year;
 
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
+@Service
 public class YearMapping {
     public YearDto toDto(Year entity) {
         YearDto dto = new YearDto();
