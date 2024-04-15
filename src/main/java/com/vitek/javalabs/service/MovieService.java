@@ -22,7 +22,7 @@ public interface MovieService {
 
     public MovieDto createMovie(MovieDto movie);
 
-    public Movie createMovieByName(String name);
+    public MovieDto createMovieByName(String name);
 
     public MovieDto updateMovie(Long id, MovieDto movie);
 

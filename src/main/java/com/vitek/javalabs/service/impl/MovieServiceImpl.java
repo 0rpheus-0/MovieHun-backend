@@ -96,18 +96,18 @@ public class MovieServiceImpl implements MovieService {
         return movie;
     }
 
-    public Movie createMovieByName(String name) {
-        Movie movie = new Movie();
+    public MovieDto createMovieByName(String name) {
+        Movie movieEntity = new Movie();
         MovieAdv movieAdv = movieAdvService.getInfotm(name);
-        movie.setTitle(movieAdv.getTitle());
-        movie.setLanguage(movieAdv.getLanguage());
-        movie.setPoster(movieAdv.getPoster());
-        movie.setRuntime(movieAdv.getRuntime());
-        movie.setPlot(movieAdv.getPlot());
+        movieEntity.setTitle(movieAdv.getTitle());
+        movieEntity.setLanguage(movieAdv.getLanguage());
+        movieEntity.setPoster(movieAdv.getPoster());
+        movieEntity.setRuntime(movieAdv.getRuntime());
+        movieEntity.setPlot(movieAdv.getPlot());
 
         Year year = new Year();
         year.setYearRel(movieAdv.getYear());
-        movie.setYear(year);
+        movieEntity.setYear(year);
 
         String genreStr = movieAdv.getGenre();
         Set<Genre> setGenre = new HashSet<>();
@@ -118,7 +118,7 @@ public class MovieServiceImpl implements MovieService {
             genre.setName(wordG.trim());
             setGenre.add(genre);
         }
-        movie.setGenres(setGenre);
+        movieEntity.setGenres(setGenre);
 
         String actorStr = movieAdv.getActors();
         Set<Actor> setActor = new HashSet<>();
@@ -129,7 +129,7 @@ public class MovieServiceImpl implements MovieService {
             actor.setName(wordA.trim());
             setActor.add(actor);
         }
-        movie.setActors(setActor);
+        movieEntity.setActors(setActor);
 
         String directorStr = movieAdv.getDirector();
         Set<Director> setDirector = new HashSet<>();
@@ -140,9 +140,10 @@ public class MovieServiceImpl implements MovieService {
             director.setName(wordD.trim());
             setDirector.add(director);
         }
-        movie.setDirectors(setDirector);
+        movieEntity.setDirectors(setDirector);
 
-        createMovie(movieMapping.toDto(movie));
+        MovieDto movie = movieMapping.toDto(movieEntity);
+        createMovie(movie);
 
         return movie;// пофиксить
     }

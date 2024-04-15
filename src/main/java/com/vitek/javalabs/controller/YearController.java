@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.vitek.javalabs.dto.YearDto;
 import com.vitek.javalabs.model.Year;
 import com.vitek.javalabs.service.YearService;
 
@@ -28,22 +29,22 @@ public class YearController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Year>> getAllYears() {
+    public ResponseEntity<List<YearDto>> getAllYears() {
         return ResponseEntity.ok(yearService.getAllYears());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Year> getYearById(@PathVariable Long id) {
+    public ResponseEntity<YearDto> getYearById(@PathVariable Long id) {
         return ResponseEntity.of(yearService.getYearById(id));
     }
 
     @PostMapping
-    public ResponseEntity<Year> createYear(@RequestBody Year year) {
+    public ResponseEntity<YearDto> createYear(@RequestBody YearDto year) {
         return ResponseEntity.ok(yearService.createYear(year));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Year> updateGenre(@PathVariable Long id, @RequestBody Year year) {
+    public ResponseEntity<YearDto> updateGenre(@PathVariable Long id, @RequestBody YearDto year) {
         return ResponseEntity.ok(yearService.updateYear(id, year));
     }
 

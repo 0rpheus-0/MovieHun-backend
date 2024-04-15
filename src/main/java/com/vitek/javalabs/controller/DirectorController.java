@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.vitek.javalabs.dto.DirectorDto;
 import com.vitek.javalabs.model.Director;
 import com.vitek.javalabs.service.DirectorService;
 
@@ -28,22 +29,22 @@ public class DirectorController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Director>> getAllDirectors() {
+    public ResponseEntity<List<DirectorDto>> getAllDirectors() {
         return ResponseEntity.ok(directorService.getAllDirectors());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Director> getDirectorById(@PathVariable Long id) {
+    public ResponseEntity<DirectorDto> getDirectorById(@PathVariable Long id) {
         return ResponseEntity.of(directorService.getDirectorById(id));
     }
 
     @PostMapping
-    public ResponseEntity<Director> createDirector(@RequestBody Director director) {
+    public ResponseEntity<DirectorDto> createDirector(@RequestBody DirectorDto director) {
         return ResponseEntity.ok(directorService.createDirector(director));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Director> updateDirector(@PathVariable Long id, @RequestBody Director director) {
+    public ResponseEntity<DirectorDto> updateDirector(@PathVariable Long id, @RequestBody DirectorDto director) {
         return ResponseEntity.ok(directorService.updateDirector(id, director));
     }
 

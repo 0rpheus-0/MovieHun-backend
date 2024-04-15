@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.vitek.javalabs.dto.ActorDto;
 import com.vitek.javalabs.model.Actor;
 import com.vitek.javalabs.service.ActorService;
 
@@ -28,22 +29,22 @@ public class ActorController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Actor>> getAllActors() {
+    public ResponseEntity<List<ActorDto>> getAllActors() {
         return ResponseEntity.ok(actorService.getAllActors());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Actor> getActorById(@PathVariable Long id) {
+    public ResponseEntity<ActorDto> getActorById(@PathVariable Long id) {
         return ResponseEntity.of(actorService.getActorById(id));
     }
 
     @PostMapping
-    public ResponseEntity<Actor> createActor(@RequestBody Actor actor) {
+    public ResponseEntity<ActorDto> createActor(@RequestBody ActorDto actor) {
         return ResponseEntity.ok(actorService.createActor(actor));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Actor> updateActor(@PathVariable Long id, @RequestBody Actor actor) {
+    public ResponseEntity<ActorDto> updateActor(@PathVariable Long id, @RequestBody ActorDto actor) {
         return ResponseEntity.ok(actorService.updateActor(id, actor));
     }
 

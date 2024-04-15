@@ -6,9 +6,11 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.vitek.javalabs.cache.EntityCache;
+import com.vitek.javalabs.dto.YearDto;
 import com.vitek.javalabs.model.Year;
 import com.vitek.javalabs.repository.YearRepository;
 import com.vitek.javalabs.service.YearService;
+import com.vitek.javalabs.utils.YearMapping;
 
 import lombok.AllArgsConstructor;
 
@@ -17,31 +19,34 @@ import lombok.AllArgsConstructor;
 public class YearServiceImpl implements YearService {
 
     private YearRepository years;
-    private EntityCache<Year> yearCache;
+    private EntityCache<YearDto> yearCache;
+    private YearMapping yearMapping;
 
-    public List<Year> getAllYears() {
-        return years.findAll();
+    public List<YearDto> getAllYears() {
+        return years.findAll().stream().map(x -> yearMapping.toDto(x)).toList();
     }
 
-    public Optional<Year> getYearById(Long id) {
-        Optional<Year> year = yearCache.get(id);
+    public Optional<YearDto> getYearById(Long id) {
+        Optional<YearDto> year = yearCache.get(id);
         if (!year.isPresent()) {
-            year = years.findById(id);
-            if (year.isPresent())
+            Optional<Year> yearEntity = years.findById(id);
+            if (yearEntity.isPresent()) {
+                year = Optional.of(yearMapping.toDto(yearEntity.get()));
                 yearCache.put(id, year.get());
+            }
         }
         return year;
     }
 
-    public Year createYear(Year year) {
+    public YearDto createYear(YearDto year) {
         yearCache.put(year.getId(), year);
-        return years.save(year);
+        return yearMapping.toDto(years.save(yearMapping.toEntity(year)));
     }
 
-    public Year updateYear(Long id, Year year) {
+    public YearDto updateYear(Long id, YearDto year) {
         year.setId(id);
         yearCache.put(id, year);
-        return years.save(year);
+        return yearMapping.toDto(years.save(yearMapping.toEntity(year)));
     }
 
     public Void deleteYearBuId(Long id) {

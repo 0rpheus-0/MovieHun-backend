@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vitek.javalabs.dto.MovieDto;
-import com.vitek.javalabs.model.Movie;
 import com.vitek.javalabs.service.MovieService;
 
 @RestController
@@ -65,7 +64,7 @@ public class MovieController {
     }
 
     @PostMapping("/name")
-    public ResponseEntity<Movie> createMovieByName(@RequestParam(value = "name") String name) {
+    public ResponseEntity<MovieDto> createMovieByName(@RequestParam(value = "name") String name) {
         return ResponseEntity.ok(movieService.createMovieByName(name));
     }
 
