@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vitek.javalabs.dto.YearDto;
-import com.vitek.javalabs.model.Year;
 import com.vitek.javalabs.service.YearService;
 
 @RestController

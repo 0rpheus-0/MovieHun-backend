@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import com.vitek.javalabs.dto.DirectorDto;
-import com.vitek.javalabs.model.Director;
 
 public interface DirectorService {
 

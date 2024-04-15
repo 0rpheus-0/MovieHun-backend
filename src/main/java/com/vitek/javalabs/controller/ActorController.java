@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vitek.javalabs.dto.ActorDto;
-import com.vitek.javalabs.model.Actor;
 import com.vitek.javalabs.service.ActorService;
 
 @RestController

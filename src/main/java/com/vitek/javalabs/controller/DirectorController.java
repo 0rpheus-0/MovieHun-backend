@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vitek.javalabs.dto.DirectorDto;
-import com.vitek.javalabs.model.Director;
 import com.vitek.javalabs.service.DirectorService;
 
 @RestController
