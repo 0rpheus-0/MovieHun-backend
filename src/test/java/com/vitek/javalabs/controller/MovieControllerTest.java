@@ -1,3 +1,5 @@
+package com.vitek.javalabs.controller;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -6,6 +8,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,75 +29,156 @@ class MovieControllerTest {
     @InjectMocks
     private MovieController movieController;
 
-    // @BeforeEach
-    // void setUp() {
-    // MockitoAnnotations.openMocks(this);
-    // }
+    @Test
+    void getAllMovies() {
+        List<MovieDto> movies = new ArrayList<>();
+        movies.add(new MovieDto());
+        movies.add(new MovieDto());
 
-    // @Test
-    // void getAllMovies() {
-    // List<MovieDto> movies = new ArrayList<>();
-    // movies.add(new MovieDto());
-    // movies.add(new MovieDto());
+        when(movieService.getAllMovies()).thenReturn(movies);
 
-    // when(movieService.getAllMovies()).thenReturn(movies);
+        ResponseEntity<List<MovieDto>> response = movieController.getAllMovies();
 
-    // ResponseEntity<List<MovieDto>> response = movieController.getAllMovies();
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(movies, response.getBody());
 
-    // assertEquals(HttpStatus.OK, response.getStatusCode());
-    // assertEquals(movies, response.getBody());
+        verify(movieService, times(1)).getAllMovies();
+        verifyNoMoreInteractions(movieService);
+    }
 
-    // verify(movieService, times(1)).getAllMovies();
-    // verifyNoMoreInteractions(movieService);
-    // }
+    @Test
+    void getMovieById() {
+        Long movieId = 1L;
+        MovieDto movieDto = new MovieDto();
+        movieDto.setId(movieId);
+        movieDto.setTitle("Test Movie");
 
-    // @Test
-    // void getMoviesByGenre() {
-    // Long genreId = 1L;
-    // List<MovieDto> movies = new ArrayList<>();
-    // movies.add(new MovieDto());
-    // movies.add(new MovieDto());
+        when(movieService.getMovieById(movieId)).thenReturn(Optional.of(movieDto));
 
-    // when(movieService.getMoviesByGenre(genreId)).thenReturn(movies);
+        ResponseEntity<MovieDto> response = movieController.getMovieById(movieId);
 
-    // ResponseEntity<List<MovieDto>> response =
-    // movieController.getMoviesByGenre(genreId);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(movieDto, response.getBody());
 
-    // assertEquals(HttpStatus.OK, response.getStatusCode());
-    // assertEquals(movies, response.getBody());
+        verify(movieService, times(1)).getMovieById(movieId);
+        verifyNoMoreInteractions(movieService);
+    }
 
-    // verify(movieService, times(1)).getMoviesByGenre(genreId);
-    // verifyNoMoreInteractions(movieService);
-    // }
+    @Test
+    void getMoviesByGenre() {
+        Long genreId = 1L;
+        List<MovieDto> movies = new ArrayList<>();
+        movies.add(new MovieDto());
+        movies.add(new MovieDto());
 
-    // // Дополнительные тесты для других методов контроллера могут быть добавлены
-    // // аналогичным образом
+        when(movieService.getMoviesByGenre(genreId)).thenReturn(movies);
 
-    // @Test
-    // void createMovie() {
-    // MovieDto movieDto = new MovieDto();
-    // movieDto.setTitle("Test Movie");
+        ResponseEntity<List<MovieDto>> response = movieController.getMoviesByGenre(genreId);
 
-    // when(movieService.createMovie(movieDto)).thenReturn(movieDto);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(movies, response.getBody());
 
-    // ResponseEntity<MovieDto> response = movieController.createMovie(movieDto);
+        verify(movieService, times(1)).getMoviesByGenre(genreId);
+        verifyNoMoreInteractions(movieService);
+    }
 
-    // assertEquals(HttpStatus.OK, response.getStatusCode());
-    // assertEquals(movieDto, response.getBody());
+    @Test
+    void getMoviesByActor() {
+        Long actorId = 1L;
+        List<MovieDto> movies = new ArrayList<>();
+        movies.add(new MovieDto());
+        movies.add(new MovieDto());
 
-    // verify(movieService, times(1)).createMovie(movieDto);
-    // verifyNoMoreInteractions(movieService);
-    // }
+        when(movieService.getMoviesByActor(actorId)).thenReturn(movies);
 
-    // @Test
-    // void deleteMovieById() {
-    // Long movieId = 1L;
+        ResponseEntity<List<MovieDto>> response = movieController.getMoviesByActor(actorId);
 
-    // ResponseEntity<Void> response = movieController.deleteMovieById(movieId);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(movies, response.getBody());
 
-    // assertEquals(HttpStatus.OK, response.getStatusCode());
+        verify(movieService, times(1)).getMoviesByActor(actorId);
+        verifyNoMoreInteractions(movieService);
+    }
 
-    // verify(movieService, times(1)).deleteMovieBuId(movieId);
-    // verifyNoMoreInteractions(movieService);
-    // }
+    @Test
+    void getMoviesByDirector() {
+        Long directorId = 1L;
+        List<MovieDto> movies = new ArrayList<>();
+        movies.add(new MovieDto());
+        movies.add(new MovieDto());
+
+        when(movieService.getMoviesByDirector(directorId)).thenReturn(movies);
+
+        ResponseEntity<List<MovieDto>> response = movieController.getMoviesByDirector(directorId);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(movies, response.getBody());
+
+        verify(movieService, times(1)).getMoviesByDirector(directorId);
+        verifyNoMoreInteractions(movieService);
+    }
+
+    @Test
+    void getMoviesByYear() {
+        Long yearId = 1L;
+        List<MovieDto> movies = new ArrayList<>();
+        movies.add(new MovieDto());
+        movies.add(new MovieDto());
+
+        when(movieService.getMoviesByYear(yearId)).thenReturn(movies);
+
+        ResponseEntity<List<MovieDto>> response = movieController.getMoviesByYear(yearId);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(movies, response.getBody());
+
+        verify(movieService, times(1)).getMoviesByYear(yearId);
+        verifyNoMoreInteractions(movieService);
+    }
+
+    @Test
+    void createMovie() {
+        MovieDto movieDto = new MovieDto();
+        movieDto.setTitle("Test Movie");
+
+        when(movieService.createMovie(movieDto)).thenReturn(movieDto);
+
+        ResponseEntity<MovieDto> response = movieController.createMovie(movieDto);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(movieDto, response.getBody());
+
+        verify(movieService, times(1)).createMovie(movieDto);
+        verifyNoMoreInteractions(movieService);
+    }
+
+    @Test
+    void updateMovie() {
+        Long movieId = 1L;
+        MovieDto movieDto = new MovieDto();
+        movieDto.setId(movieId);
+        movieDto.setTitle("Updated Movie");
+
+        when(movieService.updateMovie(movieId, movieDto)).thenReturn(movieDto);
+
+        ResponseEntity<MovieDto> response = movieController.updateMovie(movieId, movieDto);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(movieDto, response.getBody());
+
+        verify(movieService, times(1)).updateMovie(movieId, movieDto);
+        verifyNoMoreInteractions(movieService);
+    }
+
+    @Test
+    void deleteMovieById() {
+        Long movieId = 1L;
+
+        ResponseEntity<Void> response = movieController.deleteMovieById(movieId);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        verify(movieService, times(1)).deleteMovieBuId(movieId);
+        verifyNoMoreInteractions(movieService);
+    }
 }
