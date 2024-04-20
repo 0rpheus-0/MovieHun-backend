@@ -1,6 +1,12 @@
 package com.vitek.javalabs.servise.impl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -35,15 +41,15 @@ import com.vitek.javalabs.utils.MovieMapping;
 @ExtendWith(MockitoExtension.class)
 class MovieServiceImplTest {
         @Mock
-        private MovieRepository movies;
+        private MovieRepository movieRepository;
         @Mock
-        private YearRepository years;
+        private YearRepository yearRepository;
         @Mock
-        private GenreRepository ganres;
+        private GenreRepository ganreRepository;
         @Mock
-        private ActorRepository actors;
+        private ActorRepository actorRepository;
         @Mock
-        private DirectorRepository directors;
+        private DirectorRepository directorRepository;
         @Mock
         private MovieAdvService movieAdvService;
         @Mock
@@ -56,51 +62,61 @@ class MovieServiceImplTest {
 
         @Test
         void getAllMovies() {
-                List<Movie> movieList = new ArrayList<>();
-                Movie movie1 = new Movie();
-                movie1.setId(1L);
-                movie1.setTitle("Movie 1");
-                movieList.add(movie1);
-                Movie movie2 = new Movie();
-                movie2.setId(2L);
-                movie2.setTitle("Movie 2");
-                movieList.add(movie2);
+                List<Movie> movieEntities = new ArrayList<>();
+                Movie movieEntity1 = new Movie();
+                movieEntity1.setId(1L);
+                movieEntity1.setTitle("Movie 1");
+                movieEntities.add(movieEntity1);
+                Movie movieEntity2 = new Movie();
+                movieEntity2.setId(2L);
+                movieEntity2.setTitle("Movie 2");
+                movieEntities.add(movieEntity2);
 
-                List<MovieDto> expectedMovieDtoList = new ArrayList<>();
+                List<MovieDto> movieDtos = new ArrayList<>();
                 MovieDto movieDto1 = new MovieDto();
                 movieDto1.setId(1L);
                 movieDto1.setTitle("Movie 1");
                 MovieDto movieDto2 = new MovieDto();
                 movieDto2.setId(2L);
                 movieDto2.setTitle("Movie 2");
-                expectedMovieDtoList.add(movieDto1);
-                expectedMovieDtoList.add(movieDto2);
+                movieDtos.add(movieDto1);
+                movieDtos.add(movieDto2);
 
-                Mockito.when(movies.findAll()).thenReturn(movieList);
-                Mockito.when(movieMapping.toDto(movie1)).thenReturn(movieDto1);
-                Mockito.when(movieMapping.toDto(movie2)).thenReturn(movieDto2);
-                Assertions.assertEquals(expectedMovieDtoList, movieService.getAllMovies());
+                when(movieRepository.findAll()).thenReturn(movieEntities);
+                Mockito.when(movieMapping.toDto(movieEntity1)).thenReturn(movieDto1);
+                Mockito.when(movieMapping.toDto(movieEntity2)).thenReturn(movieDto2);
 
+                List<MovieDto> movies = movieService.getAllMovies();
+
+                assertNotNull(movies);
+                assertEquals(2, movies.size());
+                assertEquals(movieDtos, movieService.getAllMovies());
         }
 
         @Test
         void getMovieById() {
-                Movie movie = new Movie();
-                movie.setId(1L);
-                movie.setTitle("Movie");
-
+                Movie movieEntity = new Movie();
+                movieEntity.setId(1L);
+                movieEntity.setTitle("Movie");
                 MovieDto movieDto = new MovieDto();
                 movieDto.setId(1L);
                 movieDto.setTitle("Movie");
 
-                Mockito.when(movies.findById(1L)).thenReturn(Optional.of(movie));
-                Mockito.when(movieMapping.toDto(movie)).thenReturn(movieDto);
-                Assertions.assertEquals(movieDto, movieService.getMovieById(1L).get());
+                when(movieCache.get(1L)).thenReturn(Optional.empty());
+                when(movieRepository.findById(1L)).thenReturn(Optional.of(movieEntity));
+                when(movieMapping.toDto(movieEntity)).thenReturn(movieDto);
+
+                Optional<MovieDto> movie = movieService.getMovieById(1L);
+
+                assertTrue(movie.isPresent());
+                assertEquals("Movie", movie.get().getTitle());
+
+                verify(movieCache, times(1)).put(1L, movieDto);
         }
 
         @Test
         void getMoviesByGenre() {
-                List<Movie> movieList = new ArrayList<>();
+                List<Movie> movieEntities = new ArrayList<>();
                 Movie movie = new Movie();
                 movie.setId(1L);
                 movie.setTitle("Movie");
@@ -109,9 +125,9 @@ class MovieServiceImplTest {
                 genre.setId(1L);
                 genre.setName("genre");
                 genreSet.add(genre);
-                movieList.add(movie);
+                movieEntities.add(movie);
 
-                List<MovieDto> expectedMovieDtoList = new ArrayList<>();
+                List<MovieDto> MovieDtos = new ArrayList<>();
                 Movie expectedMovie = new Movie();
                 expectedMovie.setId(1L);
                 expectedMovie.setTitle("Movie");
@@ -121,16 +137,16 @@ class MovieServiceImplTest {
                 expectedGenre.setName("genre");
                 expectedGenreSet.add(expectedGenre);
                 MovieDto movieDto = movieMapping.toDto(expectedMovie);
-                expectedMovieDtoList.add(movieDto);
+                MovieDtos.add(movieDto);
 
-                Mockito.when(movies.findMoviesByGenre(1L)).thenReturn(movieList);
-                Mockito.when(movieMapping.toDto(movie)).thenReturn(movieDto);
-                Assertions.assertEquals(expectedMovieDtoList, movieService.getMoviesByGenre(1L));
+                when(movieRepository.findMoviesByGenre(1L)).thenReturn(movieEntities);
+                when(movieMapping.toDto(movie)).thenReturn(movieDto);
+                assertEquals(MovieDtos, movieService.getMoviesByGenre(1L));
         }
 
         @Test
         void getMoviesByActor() {
-                List<Movie> movieList = new ArrayList<>();
+                List<Movie> movieEntities = new ArrayList<>();
                 Movie movie = new Movie();
                 movie.setId(1L);
                 movie.setTitle("Movie");
@@ -139,7 +155,7 @@ class MovieServiceImplTest {
                 actor.setId(1L);
                 actor.setName("Actor");
                 actorSet.add(actor);
-                movieList.add(movie);
+                movieEntities.add(movie);
 
                 List<MovieDto> expectedMovieDtoList = new ArrayList<>();
                 Movie expectedMovie = new Movie();
@@ -153,14 +169,14 @@ class MovieServiceImplTest {
                 MovieDto movieDto = movieMapping.toDto(expectedMovie);
                 expectedMovieDtoList.add(movieDto);
 
-                Mockito.when(movies.findMoviesByActor(1L)).thenReturn(movieList);
-                Mockito.when(movieMapping.toDto(movie)).thenReturn(movieDto);
-                Assertions.assertEquals(expectedMovieDtoList, movieService.getMoviesByActor(1L));
+                when(movieRepository.findMoviesByActor(1L)).thenReturn(movieEntities);
+                when(movieMapping.toDto(movie)).thenReturn(movieDto);
+                assertEquals(expectedMovieDtoList, movieService.getMoviesByActor(1L));
         }
 
         @Test
         void getMoviesByDirector() {
-                List<Movie> movieList = new ArrayList<>();
+                List<Movie> movieEntities = new ArrayList<>();
                 Movie movie = new Movie();
                 movie.setId(1L);
                 movie.setTitle("Movie");
@@ -169,7 +185,7 @@ class MovieServiceImplTest {
                 director.setId(1L);
                 director.setName("Director");
                 directorSet.add(director);
-                movieList.add(movie);
+                movieEntities.add(movie);
 
                 List<MovieDto> expectedMovieDtoList = new ArrayList<>();
                 Movie expectedMovie = new Movie();
@@ -183,21 +199,21 @@ class MovieServiceImplTest {
                 MovieDto movieDto = movieMapping.toDto(expectedMovie);
                 expectedMovieDtoList.add(movieDto);
 
-                Mockito.when(movies.findMoviesByDirector(1L)).thenReturn(movieList);
+                Mockito.when(movieRepository.findMoviesByDirector(1L)).thenReturn(movieEntities);
                 Mockito.when(movieMapping.toDto(movie)).thenReturn(movieDto);
                 Assertions.assertEquals(expectedMovieDtoList, movieService.getMoviesByDirector(1L));
         }
 
         @Test
         void getMoviesByYear() {
-                List<Movie> movieList = new ArrayList<>();
+                List<Movie> movieEntities = new ArrayList<>();
                 Movie movie = new Movie();
                 movie.setId(1L);
                 movie.setTitle("Movie");
                 Year year = new Year();
                 year.setId(1L);
                 year.setYearRel("Year");
-                movieList.add(movie);
+                movieEntities.add(movie);
 
                 List<MovieDto> expectedMovieDtoList = new ArrayList<>();
                 Movie expectedMovie = new Movie();
@@ -209,27 +225,67 @@ class MovieServiceImplTest {
                 MovieDto movieDto = movieMapping.toDto(expectedMovie);
                 expectedMovieDtoList.add(movieDto);
 
-                Mockito.when(movies.findMoviesByYear(1L)).thenReturn(movieList);
+                Mockito.when(movieRepository.findMoviesByYear(1L)).thenReturn(movieEntities);
                 Mockito.when(movieMapping.toDto(movie)).thenReturn(movieDto);
                 Assertions.assertEquals(expectedMovieDtoList, movieService.getMoviesByYear(1L));
         }
 
         // @Test
-        // void createMovie() {
-        // Movie movie = new Movie();
-        // movie.setTitle("Movie");
-
+        // void testCreateMovie() {
+        // Movie movieEntity = new Movie();
+        // movieEntity.setId(1L);
+        // movieEntity.setTitle("Movie");
         // MovieDto movieDto = new MovieDto();
+        // movieDto.setId(1L);
         // movieDto.setTitle("Movie");
 
-        // // Mockito.when(movies.save(movie)).thenReturn(movie);
-        // Mockito.when(movieMapping.toEntity(movieDto)).thenReturn(movie);
-        // Mockito.when(movies.save(movie)).thenReturn(movie);
-        // Mockito.when(movieMapping.toDto(movie)).thenReturn(movieDto);
+        // when(movieMapping.toEntity(any(MovieDto.class))).thenReturn(movieEntity);
+        // when(movieRepository.save(movieEntity)).thenReturn(movieEntity);
+        // when(movieMapping.toDto(movieEntity)).thenReturn(movieDto);
 
-        // Assertions.assertEquals(movieDto, movieService.createMovie(movieDto));
-        // verify(movieCache).put(movieDto.getId(), movieDto);
+        // MovieDto createdMovieDto = movieService.createMovie(movieDto);
 
+        // assertNotNull(createdMovieDto);
+        // assertEquals("Movie", createdMovieDto.getTitle());
+
+        // verify(movieMapping, times(1)).toEntity(movieDto);
+        // verify(movieRepository, times(1)).save(movieEntity);
+        // verify(movieMapping, times(1)).toDto(movieEntity);
         // }
 
+        // @Test
+        // void testUpdateMovie() {
+        // Movie movieEntity = new Movie();
+        // movieEntity.setId(1L);
+        // movieEntity.setTitle("Movie");
+        // MovieDto movieDto = new MovieDto();
+        // movieDto.setId(1L);
+        // movieDto.setTitle("Movie");
+
+        // when(movieMapping.toEntity(any(MovieDto.class))).thenReturn(movieEntity);
+        // when(movieRepository.save(movieEntity)).thenReturn(movieEntity);
+        // when(movieMapping.toDto(movieEntity)).thenReturn(movieDto);
+
+        // MovieDto resultMovieDto = movieService.updateMovie(1L, movieDto);
+
+        // assertNotNull(resultMovieDto);
+        // assertEquals("Movie", resultMovieDto.getTitle());
+
+        // verify(movieMapping, times(1)).toEntity(movieDto);
+        // verify(movieRepository, times(1)).save(movieEntity);
+        // verify(movieMapping, times(1)).toDto(movieEntity);
+        // }
+
+        @Test
+        void DeleteMovie() {
+                MovieDto movieDto = new MovieDto();
+                movieDto.setId(1L);
+                movieDto.setTitle("Movie");
+
+                Void result = movieService.deleteMovieBuId(1L);
+
+                assertNull(result);
+                verify(movieCache, times(1)).remove(1L);
+                verify(movieRepository, times(1)).deleteById(1L);
+        }
 }
