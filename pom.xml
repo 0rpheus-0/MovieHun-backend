@@ -16,6 +16,8 @@
 	<properties>
 		<java.version>21</java.version>
 		<checkstyle.config.location>checkstyle.xml</checkstyle.config.location>
+		<sonar.organization>0rpheus-0</sonar.organization>
+    	<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
 	<dependencies>
 
