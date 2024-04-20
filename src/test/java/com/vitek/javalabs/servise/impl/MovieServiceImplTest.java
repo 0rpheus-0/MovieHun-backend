@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -230,51 +231,97 @@ class MovieServiceImplTest {
                 Assertions.assertEquals(expectedMovieDtoList, movieService.getMoviesByYear(1L));
         }
 
-        // @Test
-        // void testCreateMovie() {
-        // Movie movieEntity = new Movie();
-        // movieEntity.setId(1L);
-        // movieEntity.setTitle("Movie");
-        // MovieDto movieDto = new MovieDto();
-        // movieDto.setId(1L);
-        // movieDto.setTitle("Movie");
+        @Test
+        void createMovie() {
+                Movie movieEntity = new Movie();
+                movieEntity.setId(1L);
+                movieEntity.setTitle("Movie");
+                Set<Genre> genreSet = new HashSet<>();
+                Genre genre = new Genre();
+                genre.setId(1L);
+                genre.setName("genre");
+                genreSet.add(genre);
+                movieEntity.setGenres(genreSet);
+                Set<Actor> actorSet = new HashSet<>();
+                Actor actor = new Actor();
+                actor.setId(1L);
+                actor.setName("Actor");
+                actorSet.add(actor);
+                movieEntity.setActors(actorSet);
+                Set<Director> directorSet = new HashSet<>();
+                Director director = new Director();
+                director.setId(1L);
+                director.setName("Director");
+                directorSet.add(director);
+                movieEntity.setDirectors(directorSet);
+                Year year = new Year();
+                year.setId(1L);
+                year.setYearRel("Year");
+                movieEntity.setYear(year);
 
-        // when(movieMapping.toEntity(any(MovieDto.class))).thenReturn(movieEntity);
-        // when(movieRepository.save(movieEntity)).thenReturn(movieEntity);
-        // when(movieMapping.toDto(movieEntity)).thenReturn(movieDto);
+                MovieDto movieDto = new MovieDto();
+                movieDto.setId(1L);
+                movieDto.setTitle("Movie");
 
-        // MovieDto createdMovieDto = movieService.createMovie(movieDto);
+                when(movieMapping.toEntity(any(MovieDto.class))).thenReturn(movieEntity);
+                when(movieRepository.save(movieEntity)).thenReturn(movieEntity);
+                when(movieMapping.toDto(movieEntity)).thenReturn(movieDto);
 
-        // assertNotNull(createdMovieDto);
-        // assertEquals("Movie", createdMovieDto.getTitle());
+                MovieDto createdMovieDto = movieService.createMovie(movieDto);
 
-        // verify(movieMapping, times(1)).toEntity(movieDto);
-        // verify(movieRepository, times(1)).save(movieEntity);
-        // verify(movieMapping, times(1)).toDto(movieEntity);
-        // }
+                assertNotNull(createdMovieDto);
+                assertEquals("Movie", createdMovieDto.getTitle());
 
-        // @Test
-        // void testUpdateMovie() {
-        // Movie movieEntity = new Movie();
-        // movieEntity.setId(1L);
-        // movieEntity.setTitle("Movie");
-        // MovieDto movieDto = new MovieDto();
-        // movieDto.setId(1L);
-        // movieDto.setTitle("Movie");
+                verify(movieMapping, times(1)).toEntity(movieDto);
+                verify(movieRepository, times(1)).save(movieEntity);
+                verify(movieMapping, times(1)).toDto(movieEntity);
+        }
 
-        // when(movieMapping.toEntity(any(MovieDto.class))).thenReturn(movieEntity);
-        // when(movieRepository.save(movieEntity)).thenReturn(movieEntity);
-        // when(movieMapping.toDto(movieEntity)).thenReturn(movieDto);
+        @Test
+        void testUpdateMovie() {
+                Movie movieEntity = new Movie();
+                movieEntity.setId(1L);
+                movieEntity.setTitle("Movie");
+                Set<Genre> genreSet = new HashSet<>();
+                Genre genre = new Genre();
+                genre.setId(1L);
+                genre.setName("genre");
+                genreSet.add(genre);
+                movieEntity.setGenres(genreSet);
+                Set<Actor> actorSet = new HashSet<>();
+                Actor actor = new Actor();
+                actor.setId(1L);
+                actor.setName("Actor");
+                actorSet.add(actor);
+                movieEntity.setActors(actorSet);
+                Set<Director> directorSet = new HashSet<>();
+                Director director = new Director();
+                director.setId(1L);
+                director.setName("Director");
+                directorSet.add(director);
+                movieEntity.setDirectors(directorSet);
+                Year year = new Year();
+                year.setId(1L);
+                year.setYearRel("Year");
+                movieEntity.setYear(year);
 
-        // MovieDto resultMovieDto = movieService.updateMovie(1L, movieDto);
+                MovieDto movieDto = new MovieDto();
+                movieDto.setId(1L);
+                movieDto.setTitle("Movie");
 
-        // assertNotNull(resultMovieDto);
-        // assertEquals("Movie", resultMovieDto.getTitle());
+                when(movieMapping.toEntity(any(MovieDto.class))).thenReturn(movieEntity);
+                when(movieRepository.save(movieEntity)).thenReturn(movieEntity);
+                when(movieMapping.toDto(movieEntity)).thenReturn(movieDto);
 
-        // verify(movieMapping, times(1)).toEntity(movieDto);
-        // verify(movieRepository, times(1)).save(movieEntity);
-        // verify(movieMapping, times(1)).toDto(movieEntity);
-        // }
+                MovieDto resultMovieDto = movieService.updateMovie(1L, movieDto);
+
+                assertNotNull(resultMovieDto);
+                assertEquals("Movie", resultMovieDto.getTitle());
+
+                verify(movieMapping, times(1)).toEntity(movieDto);
+                verify(movieRepository, times(1)).save(movieEntity);
+                verify(movieMapping, times(1)).toDto(movieEntity);
+        }
 
         @Test
         void DeleteMovie() {

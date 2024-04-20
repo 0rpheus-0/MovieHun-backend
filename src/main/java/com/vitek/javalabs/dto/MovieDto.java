@@ -7,9 +7,11 @@ import com.vitek.javalabs.model.Director;
 import com.vitek.javalabs.model.Genre;
 import com.vitek.javalabs.model.Year;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class MovieDto {
     private Long id;
     private String title;

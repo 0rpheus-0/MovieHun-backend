@@ -1,8 +1,10 @@
 package com.vitek.javalabs.dto;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class DirectorDto {
     private Long id;
     private String name;
