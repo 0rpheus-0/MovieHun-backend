@@ -3,8 +3,6 @@ package com.vitek.javalabs.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.http.ResponseEntity;
-
 import com.vitek.javalabs.dto.GenreDto;
 
 public interface GenreService {
