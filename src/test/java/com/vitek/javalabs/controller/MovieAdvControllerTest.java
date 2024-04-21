@@ -26,7 +26,7 @@ class MovieAdvControllerTest {
     private MovieAdvController movieAdvController;
 
     @Test
-    void testGetInform() {
+    void getInform() {
         String movieName = "Test Movie";
         MovieAdv movie = new MovieAdv();
         movie.setTitle(movieName);

@@ -278,7 +278,7 @@ class MovieServiceImplTest {
         }
 
         @Test
-        void testUpdateMovie() {
+        void updateMovie() {
                 Movie movieEntity = new Movie();
                 movieEntity.setId(1L);
                 movieEntity.setTitle("Movie");

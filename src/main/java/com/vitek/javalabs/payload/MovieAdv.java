@@ -1,8 +1,10 @@
 package com.vitek.javalabs.payload;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class MovieAdv {
     private String title;
     private String year;

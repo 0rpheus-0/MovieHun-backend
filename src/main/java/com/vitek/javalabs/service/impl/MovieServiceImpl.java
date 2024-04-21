@@ -145,7 +145,7 @@ public class MovieServiceImpl implements MovieService {
         MovieDto movie = movieMapping.toDto(movieEntity);
         createMovie(movie);
 
-        return movie;// пофиксить
+        return movie;
     }
 
     public MovieDto updateMovie(Long id, MovieDto movie) {
