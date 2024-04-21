@@ -1,8 +1,11 @@
 package com.vitek.javalabs.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.vitek.javalabs.cache.EntityCache;
@@ -41,6 +44,19 @@ public class GenreServiceImpl implements GenreService {
     public GenreDto createGenre(GenreDto genre) {
         genreCache.put(genre.getId(), genre);
         return genreMapping.toDto(genres.save(genreMapping.toEntity(genre)));
+    }
+
+    public String bulkCreateGenre(List<GenreDto> genreDtos) {
+        try {
+            List<Genre> genreEntitys = new ArrayList<>();
+
+            genreDtos.stream().forEach(x -> genreEntitys.add(genreMapping.toEntity(x)));
+
+            genres.saveAll(genreEntitys);
+            return "Bulk operation completed successfully";
+        } catch (Exception e) {
+            return "Error occurred during bulk operation";
+        }
     }
 
     public GenreDto updateGenre(Long id, GenreDto genre) {

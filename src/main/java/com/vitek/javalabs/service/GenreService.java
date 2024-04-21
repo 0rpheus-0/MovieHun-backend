@@ -3,6 +3,8 @@ package com.vitek.javalabs.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.http.ResponseEntity;
+
 import com.vitek.javalabs.dto.GenreDto;
 
 public interface GenreService {
@@ -12,6 +14,8 @@ public interface GenreService {
     public Optional<GenreDto> getGenreById(Long id);
 
     public GenreDto createGenre(GenreDto genre);
+
+    public String bulkCreateGenre(List<GenreDto> genreDtos);
 
     public GenreDto updateGenre(Long id, GenreDto genre);
 

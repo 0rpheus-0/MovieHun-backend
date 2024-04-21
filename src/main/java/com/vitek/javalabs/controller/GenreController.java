@@ -42,6 +42,11 @@ public class GenreController {
         return ResponseEntity.ok(genreService.createGenre(genre));
     }
 
+    @PostMapping("/bulk")
+    public ResponseEntity<String> bulkCreateGenre(@RequestBody List<GenreDto> genres) {
+        return ResponseEntity.ok(genreService.bulkCreateGenre(genres));
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<GenreDto> updateGenre(@PathVariable Long id, @RequestBody GenreDto genre) {
         return ResponseEntity.ok(genreService.updateGenre(id, genre));
