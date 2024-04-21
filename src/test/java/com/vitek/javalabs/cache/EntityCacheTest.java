@@ -1,5 +1,9 @@
 package com.vitek.javalabs.cache;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Optional;
 
 import org.junit.jupiter.api.Assertions;
@@ -11,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class EntityCacheTest {
     private EntityCache<Object> cache;
+    private static final int MAX_CACHE_SIZE = 100;
 
     @BeforeEach
     public void setUp() {
@@ -33,6 +38,29 @@ class EntityCacheTest {
         cache.put(key, value);
         Optional<Object> result = cache.get(key);
         Assertions.assertEquals(value, result.get());
+    }
+
+    @Test
+    void putMaxCapacity() {
+        Long key;
+        Object value;
+
+        for (int i = 1; i <= MAX_CACHE_SIZE; i++) {
+            key = (long) i;
+            value = "Value " + i;
+            cache.put(key, value);
+        }
+
+        Long newKey = (long) (MAX_CACHE_SIZE + 1);
+        Object newValue = "New Value";
+        cache.put(newKey, newValue);
+
+        Optional<Object> result = cache.get(newKey);
+        assertTrue(result.isPresent());
+        assertEquals(newValue, result.get());
+
+        Optional<Object> removedValue = cache.get(1L);
+        assertFalse(removedValue.isPresent());
     }
 
     @Test
