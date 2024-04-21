@@ -153,22 +153,6 @@ class MovieControllerTest {
     }
 
     @Test
-    void createMovieByName() {
-        String name = "Test Movie";
-        MovieDto movieDto = new MovieDto();
-
-        ResponseEntity<MovieDto> expectedResponse = ResponseEntity.ok(movieDto);
-
-        when(movieService.createMovieByName(name)).thenReturn(movieDto);
-
-        ResponseEntity<MovieDto> response = movieController.createMovieByName(name);
-
-        assertEquals(expectedResponse.getStatusCode(), response.getStatusCode());
-        assertEquals(expectedResponse.getBody(), response.getBody());
-        verify(movieService, times(1)).createMovieByName(name);
-    }
-
-    @Test
     void updateMovie() {
         Long movieId = 1L;
         MovieDto movieDto = new MovieDto();

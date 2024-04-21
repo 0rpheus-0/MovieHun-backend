@@ -1,27 +1,19 @@
 package com.vitek.javalabs.service.impl;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import com.vitek.javalabs.cache.EntityCache;
 import com.vitek.javalabs.dto.MovieDto;
-import com.vitek.javalabs.model.Actor;
-import com.vitek.javalabs.model.Director;
-import com.vitek.javalabs.model.Genre;
 import com.vitek.javalabs.model.Movie;
-import com.vitek.javalabs.model.Year;
-import com.vitek.javalabs.payload.MovieAdv;
 import com.vitek.javalabs.repository.ActorRepository;
 import com.vitek.javalabs.repository.DirectorRepository;
 import com.vitek.javalabs.repository.GenreRepository;
 import com.vitek.javalabs.repository.MovieRepository;
 import com.vitek.javalabs.repository.YearRepository;
-import com.vitek.javalabs.service.MovieAdvService;
 import com.vitek.javalabs.service.MovieService;
 import com.vitek.javalabs.utils.MovieMapping;
 
@@ -36,7 +28,6 @@ public class MovieServiceImpl implements MovieService {
     private GenreRepository ganres;
     private ActorRepository actors;
     private DirectorRepository directors;
-    private MovieAdvService movieAdvService;
     private EntityCache<MovieDto> movieCache;
     private MovieMapping movieMapping;
 
@@ -93,58 +84,6 @@ public class MovieServiceImpl implements MovieService {
         movies.save(movieEntity);
         movie = movieMapping.toDto(movieEntity);
         movieCache.put(movie.getId(), movie);
-        return movie;
-    }
-
-    public MovieDto createMovieByName(String name) {
-        Movie movieEntity = new Movie();
-        MovieAdv movieAdv = movieAdvService.getInfotm(name);
-        movieEntity.setTitle(movieAdv.getTitle());
-        movieEntity.setLanguage(movieAdv.getLanguage());
-        movieEntity.setPoster(movieAdv.getPoster());
-        movieEntity.setRuntime(movieAdv.getRuntime());
-        movieEntity.setPlot(movieAdv.getPlot());
-
-        Year year = new Year();
-        year.setYearRel(movieAdv.getYear());
-        movieEntity.setYear(year);
-
-        String genreStr = movieAdv.getGenre();
-        Set<Genre> setGenre = new HashSet<>();
-
-        String[] wordsG = genreStr.split(", ");
-        for (String wordG : wordsG) {
-            Genre genre = new Genre();
-            genre.setName(wordG.trim());
-            setGenre.add(genre);
-        }
-        movieEntity.setGenres(setGenre);
-
-        String actorStr = movieAdv.getActors();
-        Set<Actor> setActor = new HashSet<>();
-
-        String[] wordsA = actorStr.split(", ");
-        for (String wordA : wordsA) {
-            Actor actor = new Actor();
-            actor.setName(wordA.trim());
-            setActor.add(actor);
-        }
-        movieEntity.setActors(setActor);
-
-        String directorStr = movieAdv.getDirector();
-        Set<Director> setDirector = new HashSet<>();
-
-        String[] wordsD = directorStr.split(", ");
-        for (String wordD : wordsD) {
-            Director director = new Director();
-            director.setName(wordD.trim());
-            setDirector.add(director);
-        }
-        movieEntity.setDirectors(setDirector);
-
-        MovieDto movie = movieMapping.toDto(movieEntity);
-        createMovie(movie);
-
         return movie;
     }
 

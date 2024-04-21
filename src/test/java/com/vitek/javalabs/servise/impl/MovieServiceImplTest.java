@@ -332,63 +332,6 @@ class MovieServiceImplTest {
                 verify(movieMapping, times(1)).toDto(movieEntity);
         }
 
-        // @Test
-        // void createMovieByName() {
-        // String name = "Movie";
-        // Movie movieEntity = new Movie();
-        // movieEntity.setId(1L);
-        // movieEntity.setTitle(name);
-        // Set<Genre> genreSet = new HashSet<>();
-        // Genre genre = new Genre();
-        // genre.setId(1L);
-        // genre.setName("Genre");
-        // genreSet.add(genre);
-        // movieEntity.setGenres(genreSet);
-        // Set<Actor> actorSet = new HashSet<>();
-        // Actor actor = new Actor();
-        // actor.setId(1L);
-        // actor.setName("Actor");
-        // actorSet.add(actor);
-        // movieEntity.setActors(actorSet);
-        // Set<Director> directorSet = new HashSet<>();
-        // Director director = new Director();
-        // director.setId(1L);
-        // director.setName("Director");
-        // directorSet.add(director);
-        // movieEntity.setDirectors(directorSet);
-        // Year year = new Year();
-        // year.setId(1L);
-        // year.setYearRel("2020");
-        // movieEntity.setYear(year);
-
-        // MovieDto movieDto = new MovieDto();
-        // movieDto.setId(1L);
-        // movieDto.setTitle(name);
-        // movieDto.setActors(actorSet);
-        // movieDto.setDirectors(directorSet);
-        // movieDto.setGenres(genreSet);
-        // movieDto.setYear(year);
-
-        // MovieAdv movieAdv = new MovieAdv();
-        // movieAdv.setTitle("Movie");
-        // movieAdv.setGenre("Genre");
-        // movieAdv.setActors("Actor");
-        // movieAdv.setDirector("Director");
-        // movieAdv.setYear("2020");
-
-        // MovieMapping movieMapping = mock(MovieMapping.class);
-        // when(movieAdvService.getInfotm(name)).thenReturn(movieAdv);
-        // when(movieMapping.toEntity(movieDto)).thenReturn(movieEntity);
-        // when(movieMapping.toDto(movieEntity)).thenReturn(movieDto);
-        // // when(movieService.createMovie(movieDto)).thenReturn(movieDto);
-
-        // MovieDto result = movieService.createMovieByName(name);
-        // assertNotNull(result);
-        // assertEquals(movieDto, result);
-        // // assertEquals(movieAdv.getLanguage(), result.getLanguage());
-        // verify(movieAdvService).getInfotm(name);
-        // }
-
         @Test
         void updateMovie() {
                 Movie movieEntity = new Movie();
