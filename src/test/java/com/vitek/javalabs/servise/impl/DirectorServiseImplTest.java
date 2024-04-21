@@ -1,10 +1,13 @@
 package com.vitek.javalabs.servise.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -80,6 +83,56 @@ class DirectorServiseImplTest {
 
         assertTrue(director.isPresent());
         assertEquals("Director", director.get().getName());
+    }
+
+    @Test
+    void testGetDirectorById_CacheHit() {
+        Long directorId = 1L;
+        DirectorDto directorDto = new DirectorDto();
+        directorDto.setId(1L);
+        directorDto.setName("Director");
+        when(directorCache.get(directorId)).thenReturn(Optional.of(directorDto));
+
+        Optional<DirectorDto> result = directorService.getDirectorById(directorId);
+
+        assertTrue(result.isPresent());
+        assertEquals(directorDto, result.get());
+        verify(directorRepository, never()).findById(anyLong());
+        verify(directorCache, never()).put(anyLong(), any(DirectorDto.class));
+    }
+
+    @Test
+    void testGetDirectorById_CacheMiss() {
+        Long directorId = 1L;
+        when(directorCache.get(directorId)).thenReturn(Optional.empty());
+
+        Director directorEntity = new Director();
+        directorEntity.setId(1L);
+        directorEntity.setName("Director");
+        when(directorRepository.findById(directorId)).thenReturn(Optional.of(directorEntity));
+
+        DirectorDto directorDto = new DirectorDto();
+        directorDto.setId(1L);
+        directorDto.setName("Director");
+        when(directorMapping.toDto(directorEntity)).thenReturn(directorDto);
+
+        Optional<DirectorDto> result = directorService.getDirectorById(directorId);
+
+        assertTrue(result.isPresent());
+        assertEquals(directorDto, result.get());
+        verify(directorCache).put(directorId, directorDto);
+    }
+
+    @Test
+    void testGetDirectorById_NotFound() {
+        Long directorId = 1L;
+        when(directorCache.get(directorId)).thenReturn(Optional.empty());
+        when(directorRepository.findById(directorId)).thenReturn(Optional.empty());
+
+        Optional<DirectorDto> result = directorService.getDirectorById(directorId);
+
+        assertFalse(result.isPresent());
+        verify(directorCache, never()).put(anyLong(), any(DirectorDto.class));
     }
 
     @Test

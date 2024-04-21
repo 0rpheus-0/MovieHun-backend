@@ -1,10 +1,13 @@
 package com.vitek.javalabs.servise.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -113,6 +116,56 @@ class MovieServiceImplTest {
                 assertEquals("Movie", movie.get().getTitle());
 
                 verify(movieCache, times(1)).put(1L, movieDto);
+        }
+
+        @Test
+        void testGetMovieById_CacheHit() {
+                Long movieId = 1L;
+                MovieDto movieDto = new MovieDto();
+                movieDto.setId(1L);
+                movieDto.setTitle("Movie");
+                when(movieCache.get(movieId)).thenReturn(Optional.of(movieDto));
+
+                Optional<MovieDto> result = movieService.getMovieById(movieId);
+
+                assertTrue(result.isPresent());
+                assertEquals(movieDto, result.get());
+                verify(movieRepository, never()).findById(anyLong());
+                verify(movieCache, never()).put(anyLong(), any(MovieDto.class));
+        }
+
+        @Test
+        void testGetMovieById_CacheMiss() {
+                Long movieId = 1L;
+                when(movieCache.get(movieId)).thenReturn(Optional.empty());
+
+                Movie movieEntity = new Movie();
+                movieEntity.setId(1L);
+                movieEntity.setTitle("Movie");
+                when(movieRepository.findById(movieId)).thenReturn(Optional.of(movieEntity));
+
+                MovieDto movieDto = new MovieDto();
+                movieDto.setId(1L);
+                movieDto.setTitle("Movie");
+                when(movieMapping.toDto(movieEntity)).thenReturn(movieDto);
+
+                Optional<MovieDto> result = movieService.getMovieById(movieId);
+
+                assertTrue(result.isPresent());
+                assertEquals(movieDto, result.get());
+                verify(movieCache).put(movieId, movieDto);
+        }
+
+        @Test
+        void testGetMovieById_NotFound() {
+                Long movieId = 1L;
+                when(movieCache.get(movieId)).thenReturn(Optional.empty());
+                when(movieRepository.findById(movieId)).thenReturn(Optional.empty());
+
+                Optional<MovieDto> result = movieService.getMovieById(movieId);
+
+                assertFalse(result.isPresent());
+                verify(movieCache, never()).put(anyLong(), any(MovieDto.class));
         }
 
         @Test

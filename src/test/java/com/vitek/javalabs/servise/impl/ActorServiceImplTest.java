@@ -1,10 +1,13 @@
 package com.vitek.javalabs.servise.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -85,6 +88,65 @@ class ActorServiceImplTest {
         assertEquals("Actor", actor.get().getName());
 
         verify(actorCache, times(1)).put(1L, actorDto);
+    }
+
+    @Test
+    void testGetActorById_CacheHit() {
+        // Arrange
+        Long actorId = 1L;
+        ActorDto actorDto = new ActorDto();
+        actorDto.setId(1L);
+        actorDto.setName("Actor");
+        when(actorCache.get(actorId)).thenReturn(Optional.of(actorDto));
+
+        // Act
+        Optional<ActorDto> result = actorService.getActorById(actorId);
+
+        // Assert
+        assertTrue(result.isPresent());
+        assertEquals(actorDto, result.get());
+        verify(actorRepository, never()).findById(anyLong());
+        verify(actorCache, never()).put(anyLong(), any(ActorDto.class));
+    }
+
+    @Test
+    void testGetActorById_CacheMiss() {
+        // Arrange
+        Long actorId = 1L;
+        when(actorCache.get(actorId)).thenReturn(Optional.empty());
+
+        Actor actorEntity = new Actor();
+        actorEntity.setId(1L);
+        actorEntity.setName("Actor");
+        when(actorRepository.findById(actorId)).thenReturn(Optional.of(actorEntity));
+
+        ActorDto actorDto = new ActorDto();
+        actorDto.setId(1L);
+        actorDto.setName("Actor");
+        when(actorMapping.toDto(actorEntity)).thenReturn(actorDto);
+
+        // Act
+        Optional<ActorDto> result = actorService.getActorById(actorId);
+
+        // Assert
+        assertTrue(result.isPresent());
+        assertEquals(actorDto, result.get());
+        verify(actorCache).put(actorId, actorDto);
+    }
+
+    @Test
+    void testGetActorById_NotFound() {
+        // Arrange
+        Long actorId = 1L;
+        when(actorCache.get(actorId)).thenReturn(Optional.empty());
+        when(actorRepository.findById(actorId)).thenReturn(Optional.empty());
+
+        // Act
+        Optional<ActorDto> result = actorService.getActorById(actorId);
+
+        // Assert
+        assertFalse(result.isPresent());
+        verify(actorCache, never()).put(anyLong(), any(ActorDto.class));
     }
 
     @Test

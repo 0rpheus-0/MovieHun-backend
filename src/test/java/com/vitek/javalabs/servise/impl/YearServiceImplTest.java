@@ -1,10 +1,13 @@
 package com.vitek.javalabs.servise.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -82,6 +85,56 @@ class YearServiceImplTest {
         assertEquals("2020", year.get().getYearRel());
 
         verify(yearCache, times(1)).put(1L, yearDto);
+    }
+
+    @Test
+    void testGetYearById_CacheHit() {
+        Long yearId = 1L;
+        YearDto yearDto = new YearDto();
+        yearDto.setId(1L);
+        yearDto.setYearRel("2020");
+        when(yearCache.get(yearId)).thenReturn(Optional.of(yearDto));
+
+        Optional<YearDto> result = yearService.getYearById(yearId);
+
+        assertTrue(result.isPresent());
+        assertEquals(yearDto, result.get());
+        verify(yearRepository, never()).findById(anyLong());
+        verify(yearCache, never()).put(anyLong(), any(YearDto.class));
+    }
+
+    @Test
+    void testGetYearById_CacheMiss() {
+        Long yearId = 1L;
+        when(yearCache.get(yearId)).thenReturn(Optional.empty());
+
+        Year yearEntity = new Year();
+        yearEntity.setId(1L);
+        yearEntity.setYearRel("2020");
+        when(yearRepository.findById(yearId)).thenReturn(Optional.of(yearEntity));
+
+        YearDto yearDto = new YearDto();
+        yearDto.setId(1L);
+        yearDto.setYearRel("2020");
+        when(yearMapping.toDto(yearEntity)).thenReturn(yearDto);
+
+        Optional<YearDto> result = yearService.getYearById(yearId);
+
+        assertTrue(result.isPresent());
+        assertEquals(yearDto, result.get());
+        verify(yearCache).put(yearId, yearDto);
+    }
+
+    @Test
+    void testGetYearById_NotFound() {
+        Long yearId = 1L;
+        when(yearCache.get(yearId)).thenReturn(Optional.empty());
+        when(yearRepository.findById(yearId)).thenReturn(Optional.empty());
+
+        Optional<YearDto> result = yearService.getYearById(yearId);
+
+        assertFalse(result.isPresent());
+        verify(yearCache, never()).put(anyLong(), any(YearDto.class));
     }
 
     @Test

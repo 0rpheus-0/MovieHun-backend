@@ -1,10 +1,13 @@
 package com.vitek.javalabs.servise.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -80,6 +83,57 @@ class GenreServiceImplTest {
 
         assertTrue(genre.isPresent());
         assertEquals("Genre", genre.get().getName());
+    }
+
+    @Test
+    void testGetGenreById_CacheHit() {
+        Long genreId = 1L;
+        GenreDto genreDto = new GenreDto();
+        genreDto.setId(1L);
+        genreDto.setName("Genre");
+        when(genreCache.get(genreId)).thenReturn(Optional.of(genreDto));
+
+        Optional<GenreDto> result = genreService.getGenreById(genreId);
+
+        assertTrue(result.isPresent());
+        assertEquals(genreDto, result.get());
+        verify(genreRepository, never()).findById(anyLong());
+        verify(genreCache, never()).put(anyLong(), any(GenreDto.class));
+    }
+
+    @Test
+    void testGetGenreById_CacheMiss() {
+        // Arrange
+        Long genreId = 1L;
+        when(genreCache.get(genreId)).thenReturn(Optional.empty());
+
+        Genre genreEntity = new Genre();
+        genreEntity.setId(1L);
+        genreEntity.setName("Genre");
+        when(genreRepository.findById(genreId)).thenReturn(Optional.of(genreEntity));
+
+        GenreDto genreDto = new GenreDto();
+        genreDto.setId(1L);
+        genreDto.setName("Genre");
+        when(genreMapping.toDto(genreEntity)).thenReturn(genreDto);
+
+        Optional<GenreDto> result = genreService.getGenreById(genreId);
+
+        assertTrue(result.isPresent());
+        assertEquals(genreDto, result.get());
+        verify(genreCache).put(genreId, genreDto);
+    }
+
+    @Test
+    void testGetGenreById_NotFound() {
+        Long genreId = 1L;
+        when(genreCache.get(genreId)).thenReturn(Optional.empty());
+        when(genreRepository.findById(genreId)).thenReturn(Optional.empty());
+
+        Optional<GenreDto> result = genreService.getGenreById(genreId);
+
+        assertFalse(result.isPresent());
+        verify(genreCache, never()).put(anyLong(), any(GenreDto.class));
     }
 
     @Test
