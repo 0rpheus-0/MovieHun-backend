@@ -43,7 +43,7 @@ public class YearController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<YearDto> updateGenre(@PathVariable Long id, @RequestBody YearDto year) {
+    public ResponseEntity<YearDto> updateYear(@PathVariable Long id, @RequestBody YearDto year) {
         return ResponseEntity.ok(yearService.updateYear(id, year));
     }
 
