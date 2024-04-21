@@ -29,13 +29,12 @@ class ExceptionsTest {
         assertEquals("Something went wrong", result.getMessage());
     }
 
-    // @Test
-    // void handleTypeMismatchException() {
-    // MethodArgumentTypeMismatchException exception =
-    // mock(MethodArgumentTypeMismatchException.class);
-    // Exceptions.Error result = exceptions.handleypeMismatchException(exception);
+    @Test
+    void handleTypeMismatchException() {
+        MethodArgumentTypeMismatchException exception = mock(MethodArgumentTypeMismatchException.class);
+        Exceptions.Error result = exceptions.handleypeMismatchException(exception);
 
-    // assertNotNull(result);
-    // assertEquals("Invalid format of parameter: " + "null", result.getMessage());
-    // }
+        assertNotNull(result);
+        assertEquals("Invalid format of parameter: " + "null", result.getMessage());
+    }
 }

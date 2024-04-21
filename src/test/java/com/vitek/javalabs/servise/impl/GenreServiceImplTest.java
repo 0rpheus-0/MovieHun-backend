@@ -6,7 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -153,6 +155,57 @@ class GenreServiceImplTest {
 
         assertNotNull(createdGenre);
         assertEquals("Genre", createdGenre.getName());
+    }
+
+    @Test
+    void testBulkCreateGenre_Success() {
+        List<Genre> genreEntities = new ArrayList<>();
+        Genre genreEntity1 = new Genre();
+        genreEntity1.setId(1L);
+        genreEntity1.setName("Genre 1");
+        Genre genreEntity2 = new Genre();
+        genreEntity2.setId(2L);
+        genreEntity1.setName("Genre 2");
+        genreEntities.add(genreEntity1);
+        genreEntities.add(genreEntity2);
+
+        List<GenreDto> genreDtos = new ArrayList<>();
+        GenreDto genreDto1 = new GenreDto();
+        genreDto1.setId(1L);
+        genreDto1.setName("Genre 1");
+        GenreDto genreDto2 = new GenreDto();
+        genreDto2.setId(2L);
+        genreDto2.setName("Genre 2");
+        genreDtos.add(genreDto1);
+        genreDtos.add(genreDto2);
+
+        when(genreMapping.toEntity(genreDto1)).thenReturn(genreEntity1);
+        when(genreMapping.toEntity(genreDto2)).thenReturn(genreEntity2);
+
+        String result = genreService.bulkCreateGenre(genreDtos);
+
+        assertEquals("Bulk operation completed successfully", result);
+        verify(genreMapping, times(2)).toEntity(any(GenreDto.class));
+        verify(genreRepository, times(1)).saveAll(genreEntities);
+    }
+
+    @Test
+    void testBulkCreateGenre_Error() {
+        List<GenreDto> genreDtos = new ArrayList<>();
+        genreDtos.add(new GenreDto());
+        genreDtos.add(new GenreDto());
+
+        when(genreMapping.toEntity(any(GenreDto.class))).thenAnswer(invocation -> {
+            return new Genre();
+        });
+
+        doThrow(new RuntimeException()).when(genreRepository).saveAll(anyList());
+
+        String result = genreService.bulkCreateGenre(genreDtos);
+
+        assertEquals("Error occurred during bulk operation", result);
+        verify(genreMapping, times(2)).toEntity(any(GenreDto.class));
+        verify(genreRepository, times(1)).saveAll(anyList());
     }
 
     @Test

@@ -72,7 +72,23 @@ class GenreControllerTest {
     }
 
     @Test
-    void greateGenre() {
+    void bulkCreateGenre() {
+        List<GenreDto> genres = new ArrayList<>();
+        genres.add(new GenreDto());
+        genres.add(new GenreDto());
+        String expectedResponse = "Bulk creation successful";
+
+        when(genreService.bulkCreateGenre(genres)).thenReturn(expectedResponse);
+
+        ResponseEntity<String> responseEntity = genreController.bulkCreateGenre(genres);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(expectedResponse, responseEntity.getBody());
+        verify(genreService, times(1)).bulkCreateGenre(genres);
+    }
+
+    @Test
+    void createGenre() {
         GenreDto genreDto = new GenreDto();
         genreDto.setName("Test Genre");
 
