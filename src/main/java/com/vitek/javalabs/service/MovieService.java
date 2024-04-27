@@ -21,6 +21,8 @@ public interface MovieService {
 
     public MovieDto createMovie(MovieDto movie);
 
+    public MovieDto createMovieByName(String name);
+
     public MovieDto updateMovie(Long id, MovieDto movie);
 
     public Void deleteMovieBuId(Long id);

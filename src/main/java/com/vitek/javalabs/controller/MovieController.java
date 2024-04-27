@@ -63,6 +63,11 @@ public class MovieController {
         return ResponseEntity.ok(movieService.createMovie(movie));
     }
 
+    @PostMapping("/name")
+    public ResponseEntity<MovieDto> createMovieByName(@RequestParam(value = "name") String name) {
+        return ResponseEntity.ok(movieService.createMovieByName(name));
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<MovieDto> updateMovie(@PathVariable Long id, @RequestBody MovieDto movie) {
         return ResponseEntity.ok(movieService.updateMovie(id, movie));
