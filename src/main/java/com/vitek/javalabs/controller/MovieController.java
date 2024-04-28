@@ -14,11 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.vitek.javalabs.aop.RequestStats;
 import com.vitek.javalabs.dto.MovieDto;
 import com.vitek.javalabs.service.MovieService;
 
 @RestController
 @RequestMapping("/movie")
+@RequestStats
 public class MovieController {
 
     private MovieService movieService;
