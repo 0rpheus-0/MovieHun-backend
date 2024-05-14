@@ -14,3 +14,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 21
       POSTGRES_DB: javabase
+  front:
+    build: ../front
+    ports:
+      - 3000:80
