@@ -1,7 +1,4 @@
-build:
-	./mvnw package
-
-localDeploy: build
+localDeploy:
 	docker compose build
 
 up: localDeploy
